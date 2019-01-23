@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<!-- saved from url=(0088)https://tw.saowen.com/a/08b4e72c357a4bd8cb9e4c0e4fbfd7518b8649775bb2ebbf22409df3145aa4df -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" async="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/analytics.js.下載"></script><script src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/osd.js.下載"></script><script src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ca-pub-6601249682792819.js.下載"></script><script type="text/javascript" async="" defer="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/js"></script><script type="text/javascript">
+      var _speedMark = new Date();
+    </script>
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊</title>
+    <meta name="description" content="">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="referrer" content="never">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="CoreCMS Alpha v0.1">
+    <meta property="og:site_name" content="掃文資訊">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="OpenCV學習之路——車牌識別之車牌定位">    <meta property="og:description" content="">
+    <meta property="og:image" content="Array">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="640"> 
+    <meta property="og:image:height" content="442">
+    <meta property="og:image:secure_url" content="Array">
+    <meta property="og:description" content="">
+    <meta name="keywords" content="img,mat,cv,out,int,size,影象,float,輪廓,rect,scalar,grad,mr,if,rects,車牌,mask,aspect,area,minrect,contours,opencv,point,result,width,height,return,imshow,in,minsize">
+    <meta name="description" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="OpenCV學習之路——車牌識別之車牌定位">
+    <meta name="twitter:description" content="">
+    <link rel="icon" href="https://storages.cdn.saowen.com/static/img/Saowen_Icon_192_@3x.png" type="image/png">
+    <link rel="shortcut icon" href="https://storages.cdn.saowen.com/static/img/Saowen_Icon_192.png" type="image/png">
+    <link rel="stylesheet" type="text/css" href="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/screen.css">
+    <link rel="dns-prefetch preconnect" href="https://www.google-analytics.com/">
+    <link rel="dns-prefetch preconnect" href="https://pagead2.googlesyndication.com/">
+    <link rel="dns-prefetch preconnect" href="https://googleads.g.doubleclick.net/">
+    <link rel="dns-prefetch preconnect" href="https://www.googletagmanager.com/">
+<script async="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/f.txt"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-6601249682792819",
+    enable_page_level_ads: true
+  });
+</script>
+<!-- Analytics.soft.org -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//analytics.soft.org/";
+    _paq.push(['setTrackerUrl', u+'put']);
+    _paq.push(['setSiteId', '1']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Analytics.soft.org Code -->
+<script src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/embed.js.下載" data-timestamp="1548209999122"></script><link rel="preload" href="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/f(1).txt" as="script"><script type="text/javascript" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/f(1).txt"></script><link rel="preload" href="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/f(2).txt" as="script"><script type="text/javascript" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/f(2).txt"></script><link rel="preload" href="https://pagead2.googlesyndication.com/pagead/js/r20190116/r20180604/show_ads_impl.js" as="script"><link rel="preload" as="style" href="https://c.disquscdn.com/next/embed/styles/lounge.d49f53e192b9080ef8880a7c9b24f1c3.css"><link rel="preload" as="script" href="https://c.disquscdn.com/next/embed/common.bundle.81998d48c30a90f1e372f73e226bece4.js"><link rel="preload" as="script" href="https://c.disquscdn.com/next/embed/lounge.bundle.d0c1d0d438572ed237181f0b3db8af75.js"><link rel="preload" as="script" href="https://disqus.com/next/config.js"><script src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/alfalfa_min.d078e4f2a4721192a99e02601a767617.js.下載" async="" charset="UTF-8"></script></head>
+<body class="post-template nav-closed">
+    <div class="nav">
+        <h3 class="nav-title">Menu</h3>
+        <a href="javascript:void(0)" class="nav-close" data-no-instant="">
+            <span class="hidden">Close</span>
+        </a>
+        <ul>
+        <li class="nav-home" role="presentation"><a href="https://tw.saowen.com/">Home</a></li>
+        <li class="nav-docker" role="presentation"><a href="https://tw.saowen.com/">臺灣</a></li>
+        <li class="nav-raspberry-pi" role="presentation"><a href="https://hk.saowen.com/">香港</a></li>
+    </ul></div>
+    <span class="nav-cover"></span>
+    <div class="site-wrapper">
+        <header class="main-header post-head no-cover">
+            <nav class="main-nav clearfix">
+                <a class="menu-button icon-menu" href="https://tw.saowen.com/"><span class="word">Home</span></a>
+            </nav>
+        </header>
+        <main class="content" role="main">
+            <article class="post" id="img-content">
+                <header class="post-header">
+                    <h1 class="post-title">OpenCV學習之路——車牌識別之車牌定位</h1>
+                    <section class="post-meta">
+                        <time class="post-date" datetime="2017-06-11">2017-06-11 / views: 647</time>
+                    </section>
+                </header>
+
+                <section class="post-content">
+                  <p><span style="background-color: #cc99ff">去年七月份因為學校專案需要開始接觸影象處理，但那時候只是到網上找車牌識別程式碼，然後加入到自己的專案中，不太清楚細節原理。</span></p>
+<p><span style="background-color: #cc99ff">現在自己重新一步步實現車牌識別。 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 18pt"><strong><span style="color: #ff0000">車牌識別流程：</span></strong></span></p>
+<p><img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/1047627-20170611171344137-583105765.png"></p>
+<p>&nbsp;</p>
+<p><strong><span style="font-size: 14pt; color: #ff0000">高斯模糊：</span></strong></p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ffff99">車牌識別中利用高斯模糊將圖片平滑化，去除干擾的噪聲對後續影象處理的影響。</span></p>
+<p><span style="font-size: 16px; color: #000000">高斯模糊（<strong>GaussianBlur()</strong>），也叫高斯平滑。</span></p>
+<div class="para"><span style="color: #000000">周邊畫素的平均值，所謂"模糊"，可以理解成<span style="background-color: #ccffff">每一個畫素都取周邊畫素的<span style="color: #000000">平均值</span></span>。</span></div>
+<div class="para"><img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/1047627-20170611144545793-1076869421.png">&nbsp; &nbsp;<img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/1047627-20170611144518606-1448790638.png">
+<div class="para">上圖中，2是中間點，周邊點都是1。"中間點"取"周圍點"的平均值，就會變成1。<span style="background-color: #ccffff">在數值上，這是一種"平滑化"。在圖形上，就相當於產生"模糊"效果</span>，"中間點"失去細節（上圖右）。顯然，<span style="background-color: #ccffff">計算平均值時，取值範圍越大，"模糊效果"越強烈。</span></div>
+<div class="para">
+<div class="lemma-picture text-pic layout-left"><a class="image-link" href="https://tw.saowen.com/rd/aHR0cDovL2JhaWtlLmJhaWR1LmNvbS9waWMvJUU5JUFCJTk4JUU2JTk2JUFGJUU2JUE4JUExJUU3JUIzJThBLzEwODg1ODEwLzAvY2YxYjlkMTZmZGZhYWY1MTJhOGQwMWMxOGU1NDk0ZWVmMDFmN2E2Nj9mcj1sZW1tYSZhbXA7Y3Q9c2luZ2xl" target="_blank" title=""><img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/cf1b9d16fdfaaf512a8d01c18e5494eef01f7a66.jpg"></a></div>
+<span style="font-size: 16px">左圖分別是原圖、模糊半徑3畫素、模糊半徑10畫素的效果。<span style="background-color: #ccffff">模糊半徑越大，影象就越模糊。</span>從數值角度看，就是數值越平滑。</span></div>
+<div class="para"><span style="font-size: 16px">接下來的問題就是，既然每個點都要取周邊畫素的平均值，那麼應該如何分配權重呢？</span></div>
+<div class="para"><span style="font-size: 16px">如果使用簡單平均，顯然不是很合理，因為影象都是連續的，越靠近的點關係越密切，越遠離的點關係越疏遠。因此，<span style="background-color: #ccffff">加權平均更合理，距離越近的點權重越大，距離越遠的點權重越小。</span></span></div>
+<div class="para">&nbsp;</div>
+OpenCV中函式</div>
+<div class="para"><strong><span class="hljs-keyword">void GaussianBlur(InputArray <span style="color: #ff0000">src</span>, OutputArray <span style="color: #ff0000">dst</span>, Size <span style="color: #ff0000">ksize</span>, <span class="hljs-keyword">double <span style="color: #ff0000">sigmaX</span>, <span class="hljs-keyword">double <span style="color: #ff0000">sigmaY</span>=<span class="hljs-number">0, <span class="hljs-keyword">int <span style="color: #ff0000">borderType</span>=BORDER_DEFAULT)</span></span></span></span></span></strong></div>
+<div class="para">引數詳解：&nbsp;<br><strong><span style="color: #ff0000">src</span></strong>：輸入圖片，可以使是任意通道數，該函式對通道是獨立處理的，但是深度只能是CV_8U, CV_16U, CV_16S, CV_32F or CV_64F.&nbsp;</div>
+<div class="para"><strong><span style="color: #ff0000">dst</span></strong>：輸出圖片，和輸入圖片相同大小和深度。&nbsp;</div>
+<div class="para"><strong><span style="color: #ff0000">ksize</span></strong>：高斯核心大小。ksize.width和ksize.height允許不相同但他們必須是正奇數。或者等於0，由引數sigma的乘機決定。&nbsp;<br><strong><span style="color: #ff0000">sigmaX</span></strong>：高斯核心在X方向的標準方差。&nbsp;<br><strong><span style="color: #ff0000">sigmaY</span></strong>：高斯核心在Y方向的標準方差。如果sigmaY為0，他將和sigmaX的值相同，如果他們都為0，那麼他們由ksize.width和ksize.height計算得出。&nbsp;<br><strong><span style="color: #ff0000">borderType</span></strong>：用於判斷影象邊界的模式。</div>
+<div class="cnblogs_code"><img alt="" class="code_img_closed" id="code_img_closed_5181481d-ffc2-4215-96f4-4e80aae3db33" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ContractedBlock.gif"><img alt="" class="code_img_opened" id="code_img_opened_5181481d-ffc2-4215-96f4-4e80aae3db33" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ExpandedBlockStart.gif" style="display: none">
+<div class="cnblogs_code_hide" id="cnblogs_code_open_5181481d-ffc2-4215-96f4-4e80aae3db33">
+<pre><span style="color: #008080">1</span> Mat Gaussian(Mat &amp;<span style="color: #000000">img) {
+</span><span style="color: #008080">2</span>     Mat <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080">3</span>     GaussianBlur(img, <span style="color: #0000ff">out</span>, Size(<span style="color: #800080">3</span>, <span style="color: #800080">3</span><span style="color: #000000">),
+</span><span style="color: #008080">4</span>         <span style="color: #800080">0</span>, <span style="color: #800080">0</span><span style="color: #000000">, BORDER_DEFAULT);
+</span><span style="color: #008080">5</span>     <span style="color: #0000ff">return</span> <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080">6</span> 
+<span style="color: #008080">7</span> }</pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p>原圖：（來自百度）</p>
+<p><img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/1047627-20170611164329059-627982610.jpg">&nbsp;&nbsp;<img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/1047627-20170611164239372-1591988461.png"></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 14pt"><strong><span style="color: #ff0000">灰度化：</span></strong></span></p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ffff99">在車牌識別中我們需要將影象轉化為灰度影象，這樣有利於後續步驟的開展，如Soble運算元只能作用於灰度影象。</span></p>
+<p><span style="font-size: 16px; color: #000000">灰度化，在<span style="color: #000000">RGB</span>模型中，如果<span style="background-color: #ccffff">R=G=B</span>時，則彩色表示一種灰度顏色，其中R=G=B的值叫<span style="color: #000000">灰度值</span>，因此，灰度影象每個畫素只需一個位元組存放灰度值（又稱強度值、亮度值），灰度範圍為0-255。</span></p>
+<p><span style="font-size: 16px; color: #000000">Opencv中函式</span></p>
+<p><span style="font-family: arial, helvetica, sans-serif"><strong><span style="font-size: 16px; color: #000000">void&nbsp;<tt class="descname"><span class="highlighted">cvtColor</span></tt><big>(</big>InputArray&nbsp;<span style="color: #ff0000">src</span>, &nbsp;OutputArray&nbsp;<span style="color: #ff0000">dst</span>, &nbsp;int&nbsp;<span style="color: #ff0000">code</span>, &nbsp;int&nbsp;<span style="color: #ff0000">dstCn</span>=0&nbsp;<big>)</big></span></strong></span></p>
+<p><span style="font-family: arial, helvetica, sans-serif">引數詳解：</span></p>
+<p><strong><span style="color: #ff0000">&nbsp;src</span>：</strong>輸入影象：8位無符號的16位無符號（cv_16uc…）或單精度浮點。<br><strong><span style="color: #ff0000">&nbsp;dst</span>：</strong>的大小和深度src.</p>
+<p><strong><span style="color: #ff0000">code</span>：</strong>輸出影象顏色空間轉換的程式碼。</p>
+<p><strong><span style="color: #ff0000">dstCn</span>：</strong>目標影象中的通道數；如果引數為0，則從SRC和程式碼自動匯出通道的數目。</p>
+<div class="cnblogs_code"><img alt="" class="code_img_closed" id="code_img_closed_1833fa43-726f-416c-8737-62cd1bf5cbb6" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ContractedBlock.gif"><img alt="" class="code_img_opened" id="code_img_opened_1833fa43-726f-416c-8737-62cd1bf5cbb6" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ExpandedBlockStart.gif" style="display: none">
+<div class="cnblogs_code_hide" id="cnblogs_code_open_1833fa43-726f-416c-8737-62cd1bf5cbb6">
+<pre><span style="color: #008080">1</span> Mat Grayscale(Mat &amp;<span style="color: #000000">img) {
+</span><span style="color: #008080">2</span>     Mat <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080">3</span>     cvtColor(img, <span style="color: #0000ff">out</span><span style="color: #000000">, CV_RGB2GRAY);
+</span><span style="color: #008080">4</span> 
+<span style="color: #008080">5</span>     <span style="color: #0000ff">return</span> <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080">6</span> }</pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p>&nbsp;<img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/1047627-20170611164222153-295413559.png"></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 14pt"><strong><span style="color: #ff0000">Sobel運算元（X方向）：</span></strong></span></p>
+<p><span style="font-size: 14pt; background-color: #ffff99"><span style="color: #000000; font-size: 16px">車牌定位的核心演算法，水平方向上的邊緣檢測，檢測出車牌區域。</span></span></p>
+<p><span style="font-size: 14pt"><span style="color: #000000; font-size: 16px">主要用於獲得數字影象的一階梯度，常見的應用和物理意義是<span style="background-color: #ccffff">邊緣檢測</span>。在技術上，它是一個離散的一階差分運算元，用來計算影象亮度函式的一階梯度之近似值。在影象的任何一點使用此運算元，將會產生該點對應的梯度向量或是其法向量。</span></span></p>
+<div class="para">該運算元包含兩組3x3的矩陣，分別為橫向及縱向，將之與影象作平面卷積，即可分別得出橫向及縱向的亮度差分近似值。如果以A代表原始影象，<span style="background-color: #ccffff">Gx及Gy分別代表經橫向及縱向邊緣檢測的影象</span>，其公式如下:</div>
+<div class="para">
+<div class="lemma-picture text-pic layout-center"><a class="image-link" href="https://tw.saowen.com/rd/aHR0cDovL2JhaWtlLmJhaWR1LmNvbS9waWMvU29iZWwlRTclQUUlOTclRTUlQUQlOTAvMTEwMDAwOTIvMC8xMTM4NTM0M2ZiZjJiMjExMTliYzY4YTJjODgwNjUzODBkZDc4ZTQ4P2ZyPWxlbW1hJmFtcDtjdD1zaW5nbGU=" target="_blank" title=""><img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/1047627-20170611152558840-2052034497.png"></a></div>
+</div>
+<div class="para">影象的每一個畫素的橫向及縱向梯度近似值可用以下的公式結合，來計算梯度的大小。</div>
+<div class="para">
+<div class="lemma-picture text-pic layout-center"><a class="image-link" href="https://tw.saowen.com/rd/aHR0cDovL2JhaWtlLmJhaWR1LmNvbS9waWMvU29iZWwlRTclQUUlOTclRTUlQUQlOTAvMTEwMDAwOTIvMC83MThlMjVjNzk3OGQ1Y2ZlZDAwMDYwNzc%2FZnI9bGVtbWEmYW1wO2N0PXNpbmdsZQ==" target="_blank" title=""><img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/cdbf6c81800a19d8b48e151733fa828ba61e4616.jpg"></a></div>
+</div>
+<div class="para">可用以下公式計算梯度方向。</div>
+<div class="para">
+<div class="lemma-picture text-pic layout-center"><a class="image-link" href="https://tw.saowen.com/rd/aHR0cDovL2JhaWtlLmJhaWR1LmNvbS9waWMvU29iZWwlRTclQUUlOTclRTUlQUQlOTAvMTEwMDAwOTIvMC85NjljYmY0NDE5ODVmZGEwYjNiN2RjNzE%2FZnI9bGVtbWEmYW1wO2N0PXNpbmdsZQ==" target="_blank" title=""><img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/023b5bb5c9ea15ce8262711bb6003af33a87b210.jpg"></a></div>
+</div>
+<div class="para">在以上例子中，如果以上的角度Θ等於零，即代表影象該處擁有縱向邊緣，左方較右方暗。</div>
+<div class="para">&nbsp;</div>
+<div class="para">OpenCV中函式：</div>
+<div class="para"><strong>void&nbsp;<tt class="descname"><span class="highlighted">Sobel</span></tt><big>(</big>InputArray&nbsp;<span style="color: #ff0000">src</span>, OutputArray&nbsp;<span style="color: #ff0000">dst</span>, int&nbsp;<span style="color: #ff0000">ddepth</span>, int&nbsp;<span style="color: #ff0000">xorder</span>, int&nbsp;<span style="color: #ff0000">yorder</span>, int&nbsp;<span style="color: #ff0000">ksize</span>=3, double<span style="color: #ff0000">&nbsp;scale</span>=1, <span style="color: #ff0000"><span style="color: #000000">double</span> delta</span>=0, int&nbsp;<span style="color: #ff0000">borderType</span>=BORDER_DEFAULT&nbsp;<big>)</big></strong></div>
+<p>引數:<br><strong><span style="color: #ff0000">src</span>：&nbsp;</strong>源影象。<br><strong><span style="color: #ff0000">dst</span></strong>：相同大小和相同數量的通道的目標影象。<br><strong><span style="color: #ff0000">ddepth</span></strong>：目標影象的深度。<br><strong><span style="color: #ff0000">xorder</span></strong>：階導數的X.<br><strong><span style="color: #ff0000">yorder</span></strong>：階導數的Y.<br><strong><span style="color: #ff0000">ksize</span></strong>：擴充套件Sobel運算元–大小。它必須是1, 3, 5，或者7。<br><strong><span style="color: #ff0000">scale</span>：</strong>計算衍生值的可選刻度因子。預設情況下，不應用縮放。看到getderivkernels()詳情。<br><strong><span style="color: #ff0000">delta</span></strong> ：可選的delta值，在將它們儲存在DST之前新增到結果中。<br><strong><span style="color: #ff0000">bordertype</span></strong>：畫素外推方法。</p>
+<p><strong><span style="color: #000000">convertScaleAbs()</span></strong>——先縮放元素再取絕對值，最後轉換格式為8bit型。</p>
+<div class="cnblogs_code"><img alt="" class="code_img_closed" id="code_img_closed_303bb5f3-ae2a-4e21-8262-98f385276709" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ContractedBlock.gif"><img alt="" class="code_img_opened" id="code_img_opened_303bb5f3-ae2a-4e21-8262-98f385276709" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ExpandedBlockStart.gif" style="display: none">
+<div class="cnblogs_code_hide" id="cnblogs_code_open_303bb5f3-ae2a-4e21-8262-98f385276709">
+<pre><span style="color: #008080"> 1</span> Mat Sobel(Mat &amp;<span style="color: #000000">img) {
+</span><span style="color: #008080"> 2</span>     Mat <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080"> 3</span> <span style="color: #000000">    Mat grad_x, grad_y;
+</span><span style="color: #008080"> 4</span> <span style="color: #000000">    Mat abs_grad_x, abs_grad_y;
+</span><span style="color: #008080"> 5</span> 
+<span style="color: #008080"> 6</span>     <span style="color: #008000">//</span><span style="color: #008000">X方向
+</span><span style="color: #008080"> 7</span>     <span style="color: #008000">//</span><span style="color: #008000">Sobel(img, grad_x, CV_16S, 1, 0, 3, 1, 1, BORDER_DEFAULT);
+</span><span style="color: #008080"> 8</span>     <span style="color: #008000">//</span><span style="color: #008000">convertScaleAbs(grad_x, abs_grad_x);</span>
+<span style="color: #008080"> 9</span>     Sobel(img, img, CV_16S, <span style="color: #800080">1</span>, <span style="color: #800080">0</span>, <span style="color: #800080">3</span>, <span style="color: #800080">1</span>, <span style="color: #800080">1</span><span style="color: #000000">, BORDER_DEFAULT);
+</span><span style="color: #008080">10</span>     convertScaleAbs(img, <span style="color: #0000ff">out</span><span style="color: #000000">);
+</span><span style="color: #008080">11</span> 
+<span style="color: #008080">12</span>     <span style="color: #008000">//</span><span style="color: #008000">Y方向
+</span><span style="color: #008080">13</span>     <span style="color: #008000">//</span><span style="color: #008000">Sobel(img, grad_y, CV_16S, 0, 1, 3, 1, 1, BORDER_DEFAULT);
+</span><span style="color: #008080">14</span>     <span style="color: #008000">//</span><span style="color: #008000">convertScaleAbs(grad_y, abs_grad_y);
+</span><span style="color: #008080">15</span>     <span style="color: #008000">//</span><span style="color: #008000">convertScaleAbs(img, out);
+</span><span style="color: #008080">16</span> 
+<span style="color: #008080">17</span>     <span style="color: #008000">//</span><span style="color: #008000">合併
+</span><span style="color: #008080">18</span>     <span style="color: #008000">//</span><span style="color: #008000">addWeighted(abs_grad_x, 0.5, abs_grad_y, 0.5, 0, out);</span>
+<span style="color: #008080">19</span> 
+<span style="color: #008080">20</span>     <span style="color: #0000ff">return</span> <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080">21</span> }</pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p>&nbsp;<img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/1047627-20170611164202793-145171292.png"></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 14pt"><strong><span style="color: #ff0000">二值化：</span></strong></span></p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ffff99">進一步對影象進行處理，強化目標區域，弱化背景。</span></p>
+<p><span style="font-size: 16px; color: #000000">影象的二值化，就是將影象上的畫素點的<span style="color: #000000">灰度值</span>設定為0或255，也就是<span style="background-color: #ccffff">將整個影象呈現出明顯的只有黑和白的視覺效果</span>。</span></p>
+<p><span style="font-size: 16px; color: #000000">OpenCV中函式</span></p>
+<p><strong><span style="font-size: 16px; color: #000000">double&nbsp;<tt class="descname"><span class="highlighted">threshold</span></tt><big>(</big>InputArray&nbsp;<span style="color: #ff0000">src</span>, OutputArray&nbsp;<span style="color: #ff0000">dst</span>, double&nbsp;<span style="color: #ff0000">thresh</span>, double&nbsp;<span style="color: #ff0000">maxVal</span>, int&nbsp;<span class="highlighted" style="color: #ff0000">thresholdType</span><big>)</big></span></strong></p>
+<p>引數:<br><strong><span style="color: #ff0000">src</span>：</strong>源陣列（單通道，32位浮點8位）。<br><strong><span style="color: #ff0000">dst</span></strong>：相同大小和型別的目標陣列。<br><strong><span style="color: #ff0000">thresh</span>：</strong>門限閾值。<br><span style="color: #ff0000"><strong>Maxval</strong></span>：最大值使用的thresh_binary和thresh_binary_inv閾值型別。<br><strong><span style="color: #ff0000">thresholdtype</span></strong>：閾值型，如下。</p>
+<p>&nbsp;<strong>THRESH_BINARY</strong> &nbsp;當前點值大於閾值時，取Maxval,也就是第四個引數，下面再不說明，否則設定為0</p>
+<p>&nbsp;<strong>THRESH_BINARY_INV</strong> 當前點值大於閾值時，設定為0，否則設定為Maxval</p>
+<p>&nbsp;<strong>THRESH_TRUNC</strong>&nbsp;當前點值大於閾值時，設定為閾值，否則不改變</p>
+<p>&nbsp;<strong>THRESH_TOZERO</strong>&nbsp;當前點值大於閾值時，不改變，否則設定為0</p>
+<p>&nbsp;<strong>THRESH_TOZERO_INV&nbsp;</strong>&nbsp;當前點值大於閾值時，設定為0，否則不改變</p>
+<div class="cnblogs_code"><img alt="" class="code_img_closed" id="code_img_closed_6c627658-a9ef-4573-8658-fb2f630ee51e" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ContractedBlock.gif"><img alt="" class="code_img_opened" id="code_img_opened_6c627658-a9ef-4573-8658-fb2f630ee51e" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ExpandedBlockStart.gif" style="display: none">
+<div class="cnblogs_code_hide" id="cnblogs_code_open_6c627658-a9ef-4573-8658-fb2f630ee51e">
+<pre><span style="color: #008080">1</span> Mat TwoValued(Mat &amp;<span style="color: #000000">img) {
+</span><span style="color: #008080">2</span>     Mat <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080">3</span>     threshold(img, <span style="color: #0000ff">out</span>, <span style="color: #800080">0</span>, <span style="color: #800080">255</span>, CV_THRESH_OTSU +<span style="color: #000000"> CV_THRESH_BINARY);
+</span><span style="color: #008080">4</span>     <span style="color: #008000">//</span><span style="color: #008000">threshold(img, out, 100, 255, CV_THRESH_BINARY);</span>
+<span style="color: #008080">5</span> 
+<span style="color: #008080">6</span>     <span style="color: #0000ff">return</span> <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080">7</span> }</pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p>&nbsp;<img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/1047627-20170611164142793-1876296832.png"></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 14pt"><strong><span style="color: #ff0000">閉操作：</span></strong></span></p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ffff99">閉操作可以將目標區域連成一個整體，便於後續輪廓的提取。</span></p>
+<p><span style="font-size: 16px; color: #000000">閉操作可使輪廓線更光滑，但與開操作相反的是，<span style="background-color: #ccffff">閉操作通常消彌狹窄的間斷和長細的鴻溝，消除小的空洞，並填補輪廓線中的斷裂。</span></span></p>
+<div class="para">使用結構元素B對集合A進行閉操作，定義為</div>
+<div class="para">
+<div class="lemma-picture text-pic"><a class="image-link" href="https://tw.saowen.com/rd/aHR0cDovL2JhaWtlLmJhaWR1LmNvbS9waWMvJUU5JTk3JUFEJUU2JTkzJThEJUU0JUJEJTlDLzc2ODk4NTAvMC9hZWMzNzkzMTBhNTViMzE5NjFhMmM2OTc0M2E5ODIyNmNlZmMxN2ZjP2ZyPWxlbW1hJmFtcDtjdD1zaW5nbGU=" target="_blank" title=""><img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/aec379310a55b31961a2c69743a98226cefc17fc.jpg"></a></div>
+</div>
+<div class="para">這個公式表明，<span style="background-color: #ccffff">使用結構元素B對集合A的閉操作就是用B對A進行膨脹，然後用B對結果進行腐蝕</span>。</div>
+<div class="para">&nbsp;</div>
+<div class="para">OpenCV中函式</div>
+<div class="para">void&nbsp;<tt class="descname"><span class="highlighted">morphologyEx</span></tt><big>(</big>InputArray&nbsp;<strong>src</strong>, OutputArray&nbsp;<strong>dst</strong>, int&nbsp;<strong>op</strong>, InputArray&nbsp;<strong>element</strong>, Point&nbsp;<strong>anchor</strong>=Point(-1,-1), int&nbsp;<strong>iterations</strong>=1, int&nbsp;<strong>borderType</strong>=BORDER_CONSTANT, const Scalar&amp;&nbsp;<strong>borderValue</strong>=morphologyDefaultBorderValue()&nbsp;<big>)</big></div>
+<div class="para">
+<p>引數:<br><span style="color: #ff0000"><strong>src</strong></span>：源影象。<br><strong><span style="color: #ff0000">dst</span></strong>：相同大小和型別的目標影象。<br><strong><span style="color: #ff0000">element</span>：</strong>核心型別 &nbsp; &nbsp;用getStructuringElement函式得到。<br><strong><span style="color: #ff0000">OP：</span></strong><br>可以是以下形式之一的形態學操作的型別：<br><strong>morph_open</strong> -開啟操作<br><strong>morph_close</strong> -閉合操作<br><strong>morph_gradient</strong> -形態學梯度<br><strong>morph_tophat</strong>“頂帽”<br><strong>morph_blackhat</strong> -“黑帽”<br><strong><span style="color: #ff0000">iterations</span>：</strong>侵蝕和膨脹的次數被應用。<br><span style="color: #ff0000"><strong>bordertype</strong></span>–畫素外推方法。<br><strong><span style="color: #ff0000">bordervalue</span></strong>–邊界值在一個恆定的邊界情況。預設值有特殊含義。</p>
+<p><span style="background-color: #ffcc99">關注前4個引數即可，後面用預設引數。</span></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+<div class="cnblogs_code"><img alt="" class="code_img_closed" id="code_img_closed_6fe4b63a-bc8e-4f59-9690-aa0b6b35da00" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ContractedBlock.gif"><img alt="" class="code_img_opened" id="code_img_opened_6fe4b63a-bc8e-4f59-9690-aa0b6b35da00" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ExpandedBlockStart.gif" style="display: none">
+<div class="cnblogs_code_hide" id="cnblogs_code_open_6fe4b63a-bc8e-4f59-9690-aa0b6b35da00">
+<pre><span style="color: #008080">1</span> Mat Close(Mat &amp;<span style="color: #000000">img) {
+</span><span style="color: #008080">2</span>     Mat <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080">3</span>     <span style="color: #008000">//</span><span style="color: #008000">Mat element(5, 5, CV_8U, cv::Scalar(1));</span>
+<span style="color: #008080">4</span>     Mat element = getStructuringElement(MORPH_RECT, Size(<span style="color: #800080">17</span>, <span style="color: #800080">5</span><span style="color: #000000">));
+</span><span style="color: #008080">5</span>     morphologyEx(img, <span style="color: #0000ff">out</span><span style="color: #000000">, cv::MORPH_CLOSE, element);
+</span><span style="color: #008080">6</span> 
+<span style="color: #008080">7</span>     <span style="color: #0000ff">return</span> <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080">8</span> }</pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p>&nbsp;<img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/1047627-20170611164116747-774677201.png"></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 14pt"><strong><span style="color: #ff0000">取輪廓：</span></strong></span></p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ffff99">將前面處理的車牌目標區域提取出來。</span></p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ffffff"><span class="highlighted">相關函式：</span></span></p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ccffcc"><span class="highlighted">查詢輪廓：</span></span></p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ffffff"><tt class="descname"><span class="highlighted">void&nbsp;<strong>findContours</strong></span></tt><big>(</big>InputOutputArray&nbsp;<strong>image</strong>, OutputArrayOfArrays&nbsp;<strong>contours</strong>, OutputArray&nbsp;<strong>hierarchy</strong>, int&nbsp;<strong>mode</strong>, int&nbsp;<strong>method</strong>, Point&nbsp;<strong>offset</strong>=Point()<big>)</big></span></p>
+<p><span style="font-size: 16px"><strong><span style="color: #ff0000">image</span></strong>：&nbsp;</span><span style="font-size: 16px">輸入的 8-位元、單通道影象. 非零元素被當成 1， 0 象素值保留為 0 - 從而影象被看成二值的。為了從灰度影象中得到這樣的二值影象，可以使用 cvThreshold, cvAdaptiveThreshold 或 cvCanny. 本函式改變輸入影象內容。&nbsp;</span></p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ffffff"><strong><span style="color: #ff0000">storage</span></strong> :得到的輪廓的儲存容器&nbsp;<br><strong><span style="color: #ff0000">first_contour</span></strong> :輸出引數：包含第一個輸出輪廓的指標&nbsp;<br><strong><span style="color: #ff0000">header_size</span></strong> ：如果 method=CV_CHAIN_CODE，則序列頭的大小 &gt;=sizeof(CvChain)，否則 &gt;=sizeof(CvContour) .&nbsp;<br><strong><span style="color: #ff0000">mode</span> </strong>：<br>提取模式.&nbsp;<br>CV_RETR_EXTERNAL - 只提取最外層的輪廓&nbsp;<br>CV_RETR_LIST - 提取所有輪廓，並且放置在 list 中&nbsp;<br>CV_RETR_CCOMP - 提取所有輪廓，並且將其組織為兩層的 hierarchy: 頂層為連通域的外圍邊界，次層為洞的內層邊界。&nbsp;<br>CV_RETR_TREE - 提取所有輪廓，並且重構巢狀輪廓的全部 hierarchy&nbsp;<br><strong><span style="color: #ff0000">method</span> </strong>:<br>逼近方法 (對所有節點, 不包括使用內部逼近的 CV_RETR_RUNS).&nbsp;<br>CV_CHAIN_CODE - Freeman 鏈碼的輸出輪廓. 其它方法輸出多邊形(定點序列).&nbsp;<br>CV_CHAIN_APPROX_NONE - 將所有點由鏈碼形式翻譯(轉化）為點序列形式&nbsp;<br>CV_CHAIN_APPROX_SIMPLE - 壓縮水平、垂直和對角分割，即函式只保留末端的象素點;&nbsp;<br>CV_CHAIN_APPROX_TC89_L1,&nbsp;<br>CV_CHAIN_APPROX_TC89_KCOS - 應用 Teh-Chin 鏈逼近演算法. CV_LINK_RUNS - 通過連線為 1 的水平碎片使用完全不同的輪廓提取演算法。僅有 CV_RETR_LIST 提取模式可以在本方法中應用.&nbsp;<br><strong><span style="color: #ff0000">offset</span></strong>&nbsp;:<br>每一個輪廓點的偏移量. 當輪廓是從影象 ROI 中提取出來的時候，使用偏移量有用，因為可以從整個影象上下文來對輪廓做分析.&nbsp;<br>函式 cvFindContours 從二值影象中提取輪廓，並且返回提取輪廓的數目。指標 first_contour 的內容由函式填寫。它包含第一個最外層輪廓的指標，如果指標為 NULL，則沒有檢測到輪廓（比如影象是全黑的）。其它輪廓可以從 first_contour 利用 h_next 和 v_next 連結訪問到。 在 cvDrawContours 的樣例顯示如何使用輪廓來進行連通域的檢測。輪廓也可以用來做形狀分析和物件識別 - 見CVPR2001 教程中的 squares 樣例。該教程可以在 SourceForge 網站上找到。&nbsp;</span></p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ccffcc">繪製輪廓：</span></p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ffffff">void&nbsp;<span style="font-family: 黑體"><strong><span style="color: #ff0000"><tt class="descname"><span class="highlighted">drawContours</span></tt></span></strong></span><big>(</big>InputOutputArray&nbsp;<strong>image</strong>, InputArrayOfArrays&nbsp;<strong>contours</strong>, int&nbsp;<strong>contourIdx</strong>, const Scalar&amp;&nbsp;<strong>color</strong>, int<strong>thickness</strong>=1, int&nbsp;<strong>lineType</strong>=8, InputArray&nbsp;<strong>hierarchy</strong>=noArray(), int&nbsp;<strong>maxLevel</strong>=INT_MAX, Point&nbsp;<strong>offset</strong>=Point()&nbsp;<big>)</big></span></p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ffffff"><img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/1047627-20170611163821543-2081651140.png"></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ffffff">相關引數參考——<a class="vglnk" href="http://www.opencv.org.cn/opencvdoc/2.3.2/html/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=drawcontours#cv.DrawContours" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>opencv</span><span>.</span><span>org</span><span>.</span><span>cn</span><span>/</span><span>opencvdoc</span><span>/</span><span>2</span><span>.</span><span>3</span><span>.</span><span>2</span><span>/</span><span>html</span><span>/</span><span>modules</span><span>/</span><span>imgproc</span><span>/</span><span>doc</span><span>/</span><span>structural</span><span>_</span><span>analysis</span><span>_</span><span>and</span><span>_</span><span>shape</span><span>_</span><span>descriptors</span><span>.</span><span>html</span><span>?</span><span>highlight</span><span>=</span><span>drawcontours</span><span>#</span><span>cv</span><span>.</span><span>DrawContours</span></a></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ccffcc">漫水填充演算法：</span></p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ffffff">int&nbsp;<strong><span style="color: #ff0000"><tt class="descname"><span class="highlighted">floodFill</span></tt></span></strong><big>(</big>InputOutputArray&nbsp;<strong>image</strong>, Point&nbsp;<strong>seed</strong>, Scalar&nbsp;<strong>newVal</strong>, Rect*&nbsp;<strong>rect</strong>=0, Scalar&nbsp;<strong>loDiff</strong>=Scalar(), Scalar<strong>upDiff</strong>=Scalar(), int&nbsp;<strong>flags</strong>=4&nbsp;<big>)</big></span></p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ffffff"><img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/1047627-20170611164036184-1125670640.png"></span></p>
+<p><img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/1047627-20170611170205106-567991061.jpg"></p>
+<p>&nbsp;</p>
+<p><img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/1047627-20170611170228262-1297558627.jpg"></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ffffff">相關引數參考——<a class="vglnk" href="http://www.opencv.org.cn/opencvdoc/2.3.2/html/modules/imgproc/doc/miscellaneous_transformations.html?highlight=floodfill#cv.FloodFill" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>opencv</span><span>.</span><span>org</span><span>.</span><span>cn</span><span>/</span><span>opencvdoc</span><span>/</span><span>2</span><span>.</span><span>3</span><span>.</span><span>2</span><span>/</span><span>html</span><span>/</span><span>modules</span><span>/</span><span>imgproc</span><span>/</span><span>doc</span><span>/</span><span>miscellaneous</span><span>_</span><span>transformations</span><span>.</span><span>html</span><span>?</span><span>highlight</span><span>=</span><span>floodfill</span><span>#</span><span>cv</span><span>.</span><span>FloodFill</span></a></span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 16px; color: #000000; background-color: #ccffcc">尺寸判斷函式</span></p>
+<div class="cnblogs_code"><img alt="" class="code_img_closed" id="code_img_closed_72a8eac8-d369-4ec6-ad72-0992ebc39805" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ContractedBlock.gif"><img alt="" class="code_img_opened" id="code_img_opened_72a8eac8-d369-4ec6-ad72-0992ebc39805" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ExpandedBlockStart.gif" style="display: none">
+<div class="cnblogs_code_hide" id="cnblogs_code_open_72a8eac8-d369-4ec6-ad72-0992ebc39805">
+<pre><span style="color: #008080"> 1</span> <span style="color: #0000ff">bool</span><span style="color: #000000"> verifySizes(RotatedRect mr)
+</span><span style="color: #008080"> 2</span> <span style="color: #000000">{
+</span><span style="color: #008080"> 3</span>     <span style="color: #0000ff">float</span> error = <span style="color: #800080">0.3</span><span style="color: #000000">;
+</span><span style="color: #008080"> 4</span>     <span style="color: #008000">//</span><span style="color: #008000">Spain car plate size: 52x11 aspect 4,7272
+</span><span style="color: #008080"> 5</span>     <span style="color: #008000">//</span><span style="color: #008000">China car plate size: 440mm*140mm，aspect 3.142857</span>
+<span style="color: #008080"> 6</span>     <span style="color: #0000ff">float</span> aspect = <span style="color: #800080">3.142857</span><span style="color: #000000">;
+</span><span style="color: #008080"> 7</span>     <span style="color: #008000">//</span><span style="color: #008000">Set a min and max area. All other patchs are discarded</span>
+<span style="color: #008080"> 8</span>     <span style="color: #0000ff">int</span> min= <span style="color: #800080">1</span>*aspect*<span style="color: #800080">1</span>; <span style="color: #008000">//</span><span style="color: #008000"> minimum area</span>
+<span style="color: #008080"> 9</span>     <span style="color: #0000ff">int</span> max= <span style="color: #800080">2000</span>*aspect*<span style="color: #800080">2000</span>; <span style="color: #008000">//</span><span style="color: #008000"> maximum area
+</span><span style="color: #008080">10</span>     <span style="color: #008000">//</span><span style="color: #008000">int min = 44 * 14 * m_verifyMin; </span><span style="color: #008000">//</span><span style="color: #008000"> minimum area
+</span><span style="color: #008080">11</span>     <span style="color: #008000">//</span><span style="color: #008000">int max = 44 * 14 * m_verifyMax; </span><span style="color: #008000">//</span><span style="color: #008000"> maximum area
+</span><span style="color: #008080">12</span>                                      <span style="color: #008000">//</span><span style="color: #008000">Get only patchs that match to a respect ratio.</span>
+<span style="color: #008080">13</span>     <span style="color: #0000ff">float</span> rmin = aspect - aspect*<span style="color: #000000">error;
+</span><span style="color: #008080">14</span>     <span style="color: #0000ff">float</span> rmax = aspect + aspect*<span style="color: #000000">error;
+</span><span style="color: #008080">15</span> 
+<span style="color: #008080">16</span>     <span style="color: #0000ff">int</span> area = mr.size.height *<span style="color: #000000"> mr.size.width;
+</span><span style="color: #008080">17</span>     <span style="color: #0000ff">float</span> r = (<span style="color: #0000ff">float</span>)mr.size.width / (<span style="color: #0000ff">float</span><span style="color: #000000">)mr.size.height;
+</span><span style="color: #008080">18</span>     <span style="color: #0000ff">if</span> (r &lt; <span style="color: #800080">1</span><span style="color: #000000">)
+</span><span style="color: #008080">19</span> <span style="color: #000000">    {
+</span><span style="color: #008080">20</span>         r = (<span style="color: #0000ff">float</span>)mr.size.height / (<span style="color: #0000ff">float</span><span style="color: #000000">)mr.size.width;
+</span><span style="color: #008080">21</span> <span style="color: #000000">    }
+</span><span style="color: #008080">22</span> 
+<span style="color: #008080">23</span>     <span style="color: #0000ff">if</span> ((area &lt; min || area &gt; max) || (r &lt; rmin || r &gt;<span style="color: #000000"> rmax))
+</span><span style="color: #008080">24</span> <span style="color: #000000">    {
+</span><span style="color: #008080">25</span>         <span style="color: #0000ff">return</span> <span style="color: #0000ff">false</span><span style="color: #000000">;
+</span><span style="color: #008080">26</span> <span style="color: #000000">    }
+</span><span style="color: #008080">27</span>     <span style="color: #0000ff">else</span>
+<span style="color: #008080">28</span> <span style="color: #000000">    {
+</span><span style="color: #008080">29</span>         <span style="color: #0000ff">return</span> <span style="color: #0000ff">true</span><span style="color: #000000">;
+</span><span style="color: #008080">30</span> <span style="color: #000000">    }
+</span><span style="color: #008080">31</span> }</pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p>&nbsp;</p>
+<p><span style="background-color: #ccffcc">均衡直方圖：</span></p>
+<div class="cnblogs_code"><img alt="" class="code_img_closed" id="code_img_closed_fc09d6aa-df9a-4a75-ab62-6ce2febd17a9" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ContractedBlock.gif"><img alt="" class="code_img_opened" id="code_img_opened_fc09d6aa-df9a-4a75-ab62-6ce2febd17a9" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ExpandedBlockStart.gif" style="display: none">
+<div class="cnblogs_code_hide" id="cnblogs_code_open_fc09d6aa-df9a-4a75-ab62-6ce2febd17a9">
+<pre><span style="color: #008080"> 1</span> Mat histeq(Mat <span style="color: #0000ff">in</span><span style="color: #000000">)
+</span><span style="color: #008080"> 2</span> <span style="color: #000000">{
+</span><span style="color: #008080"> 3</span>     Mat <span style="color: #0000ff">out</span>(<span style="color: #0000ff">in</span>.size(), <span style="color: #0000ff">in</span><span style="color: #000000">.type());
+</span><span style="color: #008080"> 4</span>     <span style="color: #0000ff">if</span> (<span style="color: #0000ff">in</span>.channels() == <span style="color: #800080">3</span><span style="color: #000000">) {
+</span><span style="color: #008080"> 5</span> <span style="color: #000000">        Mat hsv;
+</span><span style="color: #008080"> 6</span>         vector&lt;Mat&gt;<span style="color: #000000"> hsvSplit;
+</span><span style="color: #008080"> 7</span>         cvtColor(<span style="color: #0000ff">in</span><span style="color: #000000">, hsv, CV_BGR2HSV);
+</span><span style="color: #008080"> 8</span> <span style="color: #000000">        split(hsv, hsvSplit);
+</span><span style="color: #008080"> 9</span>         equalizeHist(hsvSplit[<span style="color: #800080">2</span>], hsvSplit[<span style="color: #800080">2</span><span style="color: #000000">]);
+</span><span style="color: #008080">10</span> <span style="color: #000000">        merge(hsvSplit, hsv);
+</span><span style="color: #008080">11</span>         cvtColor(hsv, <span style="color: #0000ff">out</span><span style="color: #000000">, CV_HSV2BGR);
+</span><span style="color: #008080">12</span> <span style="color: #000000">    }
+</span><span style="color: #008080">13</span>     <span style="color: #0000ff">else</span> <span style="color: #0000ff">if</span> (<span style="color: #0000ff">in</span>.channels() == <span style="color: #800080">1</span><span style="color: #000000">) {
+</span><span style="color: #008080">14</span>         equalizeHist(<span style="color: #0000ff">in</span>, <span style="color: #0000ff">out</span><span style="color: #000000">);
+</span><span style="color: #008080">15</span> <span style="color: #000000">    }
+</span><span style="color: #008080">16</span> 
+<span style="color: #008080">17</span>     <span style="color: #0000ff">return</span> <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080">18</span> 
+<span style="color: #008080">19</span> }</pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p><span style="background-color: #ccffcc">整體程式碼：</span></p>
+<p>&nbsp;</p>
+<div class="cnblogs_code"><img alt="" class="code_img_closed" id="code_img_closed_b947e678-517b-4393-9fd3-002c2b3df897" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ContractedBlock.gif"><img alt="" class="code_img_opened" id="code_img_opened_b947e678-517b-4393-9fd3-002c2b3df897" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ExpandedBlockStart.gif" style="display: none">
+<div class="cnblogs_code_hide" id="cnblogs_code_open_b947e678-517b-4393-9fd3-002c2b3df897">
+<pre><span style="color: #008080">  1</span> <span style="color: #0000ff">void</span> Contour(Mat &amp;img, Mat &amp;<span style="color: #0000ff">out</span><span style="color: #000000">) {
+</span><span style="color: #008080">  2</span>     RNG rng(<span style="color: #800080">12345</span><span style="color: #000000">);
+</span><span style="color: #008080">  3</span> 
+<span style="color: #008080">  4</span>     vector&lt; Mat &gt; contours(<span style="color: #800080">1000</span><span style="color: #000000">);
+</span><span style="color: #008080">  5</span>     vector&lt;Vec4i&gt; hierarchy(<span style="color: #800080">1000</span><span style="color: #000000">);
+</span><span style="color: #008080">  6</span>     findContours(img, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(<span style="color: #800080">0</span>, <span style="color: #800080">0</span><span style="color: #000000">));
+</span><span style="color: #008080">  7</span> 
+<span style="color: #008080">  8</span> 
+<span style="color: #008080">  9</span>     vector&lt; Mat &gt;::iterator itc =<span style="color: #000000"> contours.begin();
+</span><span style="color: #008080"> 10</span>     vector&lt;RotatedRect&gt;<span style="color: #000000"> rects;
+</span><span style="color: #008080"> 11</span>     <span style="color: #0000ff">int</span> t = <span style="color: #800080">0</span><span style="color: #000000">;
+</span><span style="color: #008080"> 12</span>     <span style="color: #0000ff">while</span> (itc !=<span style="color: #000000"> contours.end()) {
+</span><span style="color: #008080"> 13</span>         <span style="color: #008000">//</span><span style="color: #008000">Create bounding rect of object</span>
+<span style="color: #008080"> 14</span>         RotatedRect mr = minAreaRect(Mat(*<span style="color: #000000">itc));
+</span><span style="color: #008080"> 15</span>         <span style="color: #008000">//</span><span style="color: #008000">large the rect for more</span>
+<span style="color: #008080"> 16</span>         <span style="color: #0000ff">if</span> (!<span style="color: #000000">verifySizes(mr)) {
+</span><span style="color: #008080"> 17</span>             itc =<span style="color: #000000"> contours.erase(itc);
+</span><span style="color: #008080"> 18</span> <span style="color: #000000">        }
+</span><span style="color: #008080"> 19</span>         <span style="color: #0000ff">else</span><span style="color: #000000"> {
+</span><span style="color: #008080"> 20</span>             ++<span style="color: #000000">itc;
+</span><span style="color: #008080"> 21</span> <span style="color: #000000">            rects.push_back(mr);
+</span><span style="color: #008080"> 22</span> <span style="color: #000000">        }
+</span><span style="color: #008080"> 23</span> <span style="color: #000000">   }
+</span><span style="color: #008080"> 24</span>     
+<span style="color: #008080"> 25</span> <span style="color: #000000">    cv::Mat result;
+</span><span style="color: #008080"> 26</span> <span style="color: #000000">    img.copyTo(result);
+</span><span style="color: #008080"> 27</span>     <span style="color: #0000ff">for</span> (<span style="color: #0000ff">int</span> i = <span style="color: #800080">0</span>; i&lt; contours.size(); i++<span style="color: #000000">)
+</span><span style="color: #008080"> 28</span> <span style="color: #000000">    {
+</span><span style="color: #008080"> 29</span>         drawContours(result, contours, i, Scalar(<span style="color: #800080">0</span>, <span style="color: #800080">0</span>, <span style="color: #800080">255</span>), <span style="color: #800080">2</span>, <span style="color: #800080">8</span>, vector&lt;Vec4i&gt;(), <span style="color: #800080">0</span><span style="color: #000000">, Point());
+</span><span style="color: #008080"> 30</span>         <span style="color: #008000">//</span><span style="color: #008000">drawContours(result, contours, i, Scalar(255), 2);</span>
+<span style="color: #008080"> 31</span> <span style="color: #000000">    }
+</span><span style="color: #008080"> 32</span> 
+<span style="color: #008080"> 33</span>     <span style="color: #008000">//</span><span style="color: #008000">imshow("MASK11", result);</span>
+<span style="color: #008080"> 34</span> 
+<span style="color: #008080"> 35</span>     <span style="color: #0000ff">for</span> (<span style="color: #0000ff">int</span> i = <span style="color: #800080">0</span>; i &lt; rects.size(); i++<span style="color: #000000">) {
+</span><span style="color: #008080"> 36</span>         circle(result, rects[i].center, <span style="color: #800080">3</span>, Scalar(<span style="color: #800080">0</span>, <span style="color: #800080">255</span>, <span style="color: #800080">0</span>), -<span style="color: #800080">1</span><span style="color: #000000">);
+</span><span style="color: #008080"> 37</span> 
+<span style="color: #008080"> 38</span>         <span style="color: #0000ff">float</span> minSize = (rects[i].size.width &lt; rects[i].size.height) ?<span style="color: #000000"> rects[i].size.width : rects[i].size.height;
+</span><span style="color: #008080"> 39</span>         <span style="color: #008000">//</span><span style="color: #008000">minSize = minSize - minSize*0.5;</span>
+<span style="color: #008080"> 40</span> 
+<span style="color: #008080"> 41</span> <span style="color: #000000">        srand(time(NULL));
+</span><span style="color: #008080"> 42</span> <span style="color: #000000">        Mat mask;
+</span><span style="color: #008080"> 43</span>         mask.create(<span style="color: #0000ff">out</span>.rows + <span style="color: #800080">2</span>, <span style="color: #0000ff">out</span>.cols + <span style="color: #800080">2</span><span style="color: #000000">, CV_8UC1);
+</span><span style="color: #008080"> 44</span>         mask = Scalar::all(<span style="color: #800080">0</span><span style="color: #000000">);
+</span><span style="color: #008080"> 45</span>         <span style="color: #0000ff">int</span> loDiff = <span style="color: #800080">30</span><span style="color: #000000">;
+</span><span style="color: #008080"> 46</span>         <span style="color: #0000ff">int</span> upDiff = <span style="color: #800080">30</span><span style="color: #000000">;
+</span><span style="color: #008080"> 47</span>         <span style="color: #0000ff">int</span> connectivity = <span style="color: #800080">4</span><span style="color: #000000">;
+</span><span style="color: #008080"> 48</span>         <span style="color: #0000ff">int</span> newMaskVal = <span style="color: #800080">255</span><span style="color: #000000">;
+</span><span style="color: #008080"> 49</span>         <span style="color: #0000ff">int</span> NumSeeds = <span style="color: #800080">10</span><span style="color: #000000">;
+</span><span style="color: #008080"> 50</span> <span style="color: #000000">        Rect ccomp;
+</span><span style="color: #008080"> 51</span>         <span style="color: #0000ff">int</span> flags = connectivity + (newMaskVal &lt;&lt; <span style="color: #800080">8</span>) + CV_FLOODFILL_FIXED_RANGE +<span style="color: #000000"> CV_FLOODFILL_MASK_ONLY;
+</span><span style="color: #008080"> 52</span> 
+<span style="color: #008080"> 53</span>         <span style="color: #0000ff">for</span> (<span style="color: #0000ff">int</span> j = <span style="color: #800080">0</span>; j &lt; NumSeeds; j++<span style="color: #000000">) {
+</span><span style="color: #008080"> 54</span> <span style="color: #000000">            Point seed;
+</span><span style="color: #008080"> 55</span>             seed.x = rects[i].center.x + rand() % (<span style="color: #0000ff">int</span>)minSize - (minSize / <span style="color: #800080">2</span><span style="color: #000000">);
+</span><span style="color: #008080"> 56</span>             seed.y = rects[i].center.y + rand() % (<span style="color: #0000ff">int</span>)minSize - (minSize / <span style="color: #800080">2</span><span style="color: #000000">);
+</span><span style="color: #008080"> 57</span>             circle(result, seed, <span style="color: #800080">1</span>, Scalar(<span style="color: #800080">0</span>, <span style="color: #800080">255</span>, <span style="color: #800080">255</span>), -<span style="color: #800080">1</span><span style="color: #000000">);
+</span><span style="color: #008080"> 58</span>             <span style="color: #0000ff">int</span> area = floodFill(<span style="color: #0000ff">out</span>, mask, seed, Scalar(<span style="color: #800080">255</span>, <span style="color: #800080">0</span>, <span style="color: #800080">0</span>), &amp;<span style="color: #000000">ccomp, Scalar(loDiff, loDiff, loDiff), Scalar(upDiff, upDiff, upDiff), flags);
+</span><span style="color: #008080"> 59</span> <span style="color: #000000">        }
+</span><span style="color: #008080"> 60</span> 
+<span style="color: #008080"> 61</span>         <span style="color: #008000">//</span><span style="color: #008000">imshow("MASK", mask);</span>
+<span style="color: #008080"> 62</span>         
+<span style="color: #008080"> 63</span>         vector&lt;Point&gt;<span style="color: #000000"> pointsInterest;
+</span><span style="color: #008080"> 64</span>         Mat_&lt;uchar&gt;::iterator itMask = mask.begin&lt;uchar&gt;<span style="color: #000000">();
+</span><span style="color: #008080"> 65</span>         Mat_&lt;uchar&gt;::iterator end = mask.end&lt;uchar&gt;<span style="color: #000000">();
+</span><span style="color: #008080"> 66</span>         <span style="color: #0000ff">for</span> (; itMask != end; ++<span style="color: #000000">itMask)
+</span><span style="color: #008080"> 67</span>             <span style="color: #0000ff">if</span> (*itMask == <span style="color: #800080">255</span><span style="color: #000000">)
+</span><span style="color: #008080"> 68</span> <span style="color: #000000">                pointsInterest.push_back(itMask.pos());
+</span><span style="color: #008080"> 69</span> 
+<span style="color: #008080"> 70</span>         RotatedRect minRect =<span style="color: #000000"> minAreaRect(pointsInterest);
+</span><span style="color: #008080"> 71</span> 
+<span style="color: #008080"> 72</span>         <span style="color: #0000ff">if</span><span style="color: #000000"> (verifySizes(minRect)) {
+</span><span style="color: #008080"> 73</span>             <span style="color: #008000">//</span><span style="color: #008000"> rotated rectangle drawing   </span>
+<span style="color: #008080"> 74</span>             Point2f rect_points[<span style="color: #800080">4</span><span style="color: #000000">]; minRect.points(rect_points);
+</span><span style="color: #008080"> 75</span>             <span style="color: #0000ff">for</span> (<span style="color: #0000ff">int</span> j = <span style="color: #800080">0</span>; j &lt; <span style="color: #800080">4</span>; j++<span style="color: #000000">)
+</span><span style="color: #008080"> 76</span>                 line(result, rect_points[j], rect_points[(j + <span style="color: #800080">1</span>) % <span style="color: #800080">4</span>], Scalar(<span style="color: #800080">0</span>, <span style="color: #800080">0</span>, <span style="color: #800080">255</span>), <span style="color: #800080">1</span>, <span style="color: #800080">8</span><span style="color: #000000">);
+</span><span style="color: #008080"> 77</span> 
+<span style="color: #008080"> 78</span>             <span style="color: #008000">//</span><span style="color: #008000">Get rotation matrix  </span>
+<span style="color: #008080"> 79</span>             <span style="color: #0000ff">float</span> r = (<span style="color: #0000ff">float</span>)minRect.size.width / (<span style="color: #0000ff">float</span><span style="color: #000000">)minRect.size.height;
+</span><span style="color: #008080"> 80</span>             <span style="color: #0000ff">float</span> angle =<span style="color: #000000"> minRect.angle;
+</span><span style="color: #008080"> 81</span>             <span style="color: #0000ff">if</span> (r &lt; <span style="color: #800080">1</span><span style="color: #000000">)
+</span><span style="color: #008080"> 82</span>                 angle = <span style="color: #800080">90</span> +<span style="color: #000000"> angle;
+</span><span style="color: #008080"> 83</span>             Mat rotmat = getRotationMatrix2D(minRect.center, angle, <span style="color: #800080">1</span><span style="color: #000000">);
+</span><span style="color: #008080"> 84</span> 
+<span style="color: #008080"> 85</span>             <span style="color: #008000">//</span><span style="color: #008000">Create and rotate image  </span>
+<span style="color: #008080"> 86</span> <span style="color: #000000">            Mat img_rotated;
+</span><span style="color: #008080"> 87</span>             warpAffine(<span style="color: #0000ff">out</span>, img_rotated, rotmat, <span style="color: #0000ff">out</span>.size(), CV_INTER_CUBIC);<span style="color: #008000">//</span><span style="color: #008000">實現旋轉
+</span><span style="color: #008080"> 88</span> 
+<span style="color: #008080"> 89</span>             <span style="color: #008000">//</span><span style="color: #008000">Crop image  </span>
+<span style="color: #008080"> 90</span>             Size rect_size =<span style="color: #000000"> minRect.size;
+</span><span style="color: #008080"> 91</span>             <span style="color: #0000ff">if</span> (r &lt; <span style="color: #800080">1</span><span style="color: #000000">)
+</span><span style="color: #008080"> 92</span> <span style="color: #000000">                swap(rect_size.width, rect_size.height);
+</span><span style="color: #008080"> 93</span> <span style="color: #000000">            Mat img_crop;
+</span><span style="color: #008080"> 94</span> <span style="color: #000000">            getRectSubPix(img_rotated, rect_size, minRect.center, img_crop);
+</span><span style="color: #008080"> 95</span> 
+<span style="color: #008080"> 96</span> <span style="color: #000000">            Mat resultResized;
+</span><span style="color: #008080"> 97</span>             resultResized.create(<span style="color: #800080">33</span>, <span style="color: #800080">144</span><span style="color: #000000">, CV_8UC3);
+</span><span style="color: #008080"> 98</span>             resize(img_crop, resultResized, resultResized.size(), <span style="color: #800080">0</span>, <span style="color: #800080">0</span><span style="color: #000000">, INTER_CUBIC);;
+</span><span style="color: #008080"> 99</span> 
+<span style="color: #008080">100</span>             <span style="color: #808080">///</span><span style="color: #008000">/Equalize croped image  </span>
+<span style="color: #008080">101</span> <span style="color: #000000">            Mat grayResult;
+</span><span style="color: #008080">102</span>             cvtColor(resultResized, grayResult, CV_BGR2GRAY);<span style="color: #008000">//</span><span style="color: #008000"> CV_RGB2GRAY</span>
+<span style="color: #008080">103</span>             blur(grayResult, grayResult, Size(<span style="color: #800080">3</span>, <span style="color: #800080">3</span><span style="color: #000000">));
+</span><span style="color: #008080">104</span>             grayResult =<span style="color: #000000"> histeq(grayResult);
+</span><span style="color: #008080">105</span> 
+<span style="color: #008080">106</span>             <span style="color: #0000ff">if</span> (<span style="color: #800080">1</span><span style="color: #000000">) {
+</span><span style="color: #008080">107</span>                 stringstream ss(stringstream::<span style="color: #0000ff">in</span> | stringstream::<span style="color: #0000ff">out</span><span style="color: #000000">);
+</span><span style="color: #008080">108</span>                 ss &lt;&lt; <span style="color: #800000">"</span><span style="color: #800000">haha</span><span style="color: #800000">"</span> &lt;&lt; <span style="color: #800000">"</span><span style="color: #800000">_</span><span style="color: #800000">"</span> &lt;&lt; i &lt;&lt; <span style="color: #800000">"</span><span style="color: #800000">.jpg</span><span style="color: #800000">"</span><span style="color: #000000">;
+</span><span style="color: #008080">109</span> <span style="color: #000000">                imwrite(ss.str(), grayResult);
+</span><span style="color: #008080">110</span> <span style="color: #000000">            }
+</span><span style="color: #008080">111</span> 
+<span style="color: #008080">112</span> <span style="color: #000000">        }
+</span><span style="color: #008080">113</span> <span style="color: #000000">    }
+</span><span style="color: #008080">114</span> }</pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p>&nbsp;</p>
+<p><span style="font-size: 14pt"><strong><span style="color: #ff0000">主函式：</span></strong></span></p>
+<div class="cnblogs_code"><img alt="" class="code_img_closed" id="code_img_closed_b3ab74f3-2df7-4013-86d3-76803565af22" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ContractedBlock.gif"><img alt="" class="code_img_opened" id="code_img_opened_b3ab74f3-2df7-4013-86d3-76803565af22" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ExpandedBlockStart.gif" style="display: none">
+<div class="cnblogs_code_hide" id="cnblogs_code_open_b3ab74f3-2df7-4013-86d3-76803565af22">
+<pre><span style="color: #008080"> 1</span> <span style="color: #0000ff">int</span><span style="color: #000000"> main() {
+</span><span style="color: #008080"> 2</span> <span style="color: #000000">    Mat img;
+</span><span style="color: #008080"> 3</span>     Mat <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080"> 4</span>     <span style="color: #008000">//</span><span style="color: #008000">Mat result;
+</span><span style="color: #008080"> 5</span> 
+<span style="color: #008080"> 6</span>     <span style="color: #008000">//</span><span style="color: #008000">載入圖片  </span>
+<span style="color: #008080"> 7</span>     img = imread(<span style="color: #800000">"</span><span style="color: #800000">test1.jpg</span><span style="color: #800000">"</span>);<span style="color: #008000">//</span><span style="color: #008000">, CV_LOAD_IMAGE_GRAYSCALE);</span>
+<span style="color: #008080"> 8</span>     img.copyTo(<span style="color: #0000ff">out</span><span style="color: #000000">);
+</span><span style="color: #008080"> 9</span>     <span style="color: #008000">//</span><span style="color: #008000">imshow ("原始圖", img);</span>
+<span style="color: #008080">10</span> 
+<span style="color: #008080">11</span>     img =<span style="color: #000000"> Gaussian(img);
+</span><span style="color: #008080">12</span>     <span style="color: #008000">//</span><span style="color: #008000">imshow ("高斯模糊", img);</span>
+<span style="color: #008080">13</span> 
+<span style="color: #008080">14</span>     img =<span style="color: #000000"> Grayscale(img);
+</span><span style="color: #008080">15</span>     <span style="color: #008000">//</span><span style="color: #008000">imshow("灰度化", img);</span>
+<span style="color: #008080">16</span> 
+<span style="color: #008080">17</span>     img =<span style="color: #000000"> Sobel(img);
+</span><span style="color: #008080">18</span>     <span style="color: #008000">//</span><span style="color: #008000">imshow("Sobel_X", img);</span>
+<span style="color: #008080">19</span> 
+<span style="color: #008080">20</span>     img =<span style="color: #000000"> TwoValued(img);
+</span><span style="color: #008080">21</span>     <span style="color: #008000">//</span><span style="color: #008000">imshow("二值化", img);</span>
+<span style="color: #008080">22</span> 
+<span style="color: #008080">23</span>     img =<span style="color: #000000"> Close(img);
+</span><span style="color: #008080">24</span>     <span style="color: #008000">//</span><span style="color: #008000">imshow("閉操作", img);
+</span><span style="color: #008080">25</span> 
+<span style="color: #008080">26</span>     <span style="color: #008000">//
+</span><span style="color: #008080">27</span>     Contour(img, <span style="color: #0000ff">out</span><span style="color: #000000">);
+</span><span style="color: #008080">28</span> 
+<span style="color: #008080">29</span>     waitKey(<span style="color: #800080">0</span><span style="color: #000000">);
+</span><span style="color: #008080">30</span> <span style="color: #000000">    cvDestroyAllWindows();
+</span><span style="color: #008080">31</span> }</pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p>&nbsp;<img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/1047627-20170611163933043-607559100.jpg"></p>
+<p><img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/1047627-20170611163942012-342463766.jpg"></p>
+<p><img alt="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/1047627-20170611163948012-421596382.jpg"></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 18pt"><strong><span style="color: #ff0000">&nbsp;車牌定位部分完整程式碼：</span></strong></span></p>
+<p>&nbsp;</p>
+<div class="cnblogs_code"><img alt="" class="code_img_closed" id="code_img_closed_4781080b-5ee0-4181-82e9-1765016a7ecc" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ContractedBlock.gif"><img alt="" class="code_img_opened" id="code_img_opened_4781080b-5ee0-4181-82e9-1765016a7ecc" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/ExpandedBlockStart.gif" style="display: none">
+<div class="cnblogs_code_hide" id="cnblogs_code_open_4781080b-5ee0-4181-82e9-1765016a7ecc">
+<pre><span style="color: #008080">  1</span> <span style="color: #008000">/*</span><span style="color: #008000">------------------------------ - 程序介紹------------------------------</span><span style="color: #008000">*/</span>
+<span style="color: #008080">  2</span> <span style="color: #008000">//</span><span style="color: #008000">版本：VS2017 + Opencv2.4.9
+</span><span style="color: #008080">  3</span> <span style="color: #008000">//</span><span style="color: #008000">描述：OpenCV學習之路——車牌識別之車牌定位</span>
+<span style="color: #008080">  4</span> <span style="color: #008000">/*</span><span style="color: #008000">-----------------------------------------------------------------------</span><span style="color: #008000">*/</span>
+<span style="color: #008080">  5</span> 
+<span style="color: #008080">  6</span> 
+<span style="color: #008080">  7</span> #include <span style="color: #800000">"</span><span style="color: #800000">opencv.hpp</span><span style="color: #800000">"</span>
+<span style="color: #008080">  8</span> #include <span style="color: #800000">"</span><span style="color: #800000">opencv2/highgui/highgui.hpp</span><span style="color: #800000">"</span>
+<span style="color: #008080">  9</span> #include <span style="color: #800000">"</span><span style="color: #800000">opencv2/imgproc/imgproc.hpp</span><span style="color: #800000">"</span>
+<span style="color: #008080"> 10</span> #include <span style="color: #800000">"</span><span style="color: #800000">opencv2\core\core.hpp</span><span style="color: #800000">"</span>
+<span style="color: #008080"> 11</span> #include <span style="color: #800000">"</span><span style="color: #800000">vector</span><span style="color: #800000">"</span>
+<span style="color: #008080"> 12</span> #include <span style="color: #800000">"</span><span style="color: #800000">iostream</span><span style="color: #800000">"</span>
+<span style="color: #008080"> 13</span> #include <span style="color: #800000">"</span><span style="color: #800000">time.h</span><span style="color: #800000">"</span>
+<span style="color: #008080"> 14</span> 
+<span style="color: #008080"> 15</span> <span style="color: #0000ff">using</span> <span style="color: #0000ff">namespace</span><span style="color: #000000"> cv;
+</span><span style="color: #008080"> 16</span> <span style="color: #0000ff">using</span> <span style="color: #0000ff">namespace</span><span style="color: #000000"> std;
+</span><span style="color: #008080"> 17</span> 
+<span style="color: #008080"> 18</span> Mat histeq(Mat <span style="color: #0000ff">in</span><span style="color: #000000">)
+</span><span style="color: #008080"> 19</span> <span style="color: #000000">{
+</span><span style="color: #008080"> 20</span>     Mat <span style="color: #0000ff">out</span>(<span style="color: #0000ff">in</span>.size(), <span style="color: #0000ff">in</span><span style="color: #000000">.type());
+</span><span style="color: #008080"> 21</span>     <span style="color: #0000ff">if</span> (<span style="color: #0000ff">in</span>.channels() == <span style="color: #800080">3</span><span style="color: #000000">) {
+</span><span style="color: #008080"> 22</span> <span style="color: #000000">        Mat hsv;
+</span><span style="color: #008080"> 23</span>         vector&lt;Mat&gt;<span style="color: #000000"> hsvSplit;
+</span><span style="color: #008080"> 24</span>         cvtColor(<span style="color: #0000ff">in</span><span style="color: #000000">, hsv, CV_BGR2HSV);
+</span><span style="color: #008080"> 25</span> <span style="color: #000000">        split(hsv, hsvSplit);
+</span><span style="color: #008080"> 26</span>         equalizeHist(hsvSplit[<span style="color: #800080">2</span>], hsvSplit[<span style="color: #800080">2</span><span style="color: #000000">]);
+</span><span style="color: #008080"> 27</span> <span style="color: #000000">        merge(hsvSplit, hsv);
+</span><span style="color: #008080"> 28</span>         cvtColor(hsv, <span style="color: #0000ff">out</span><span style="color: #000000">, CV_HSV2BGR);
+</span><span style="color: #008080"> 29</span> <span style="color: #000000">    }
+</span><span style="color: #008080"> 30</span>     <span style="color: #0000ff">else</span> <span style="color: #0000ff">if</span> (<span style="color: #0000ff">in</span>.channels() == <span style="color: #800080">1</span><span style="color: #000000">) {
+</span><span style="color: #008080"> 31</span>         equalizeHist(<span style="color: #0000ff">in</span>, <span style="color: #0000ff">out</span><span style="color: #000000">);
+</span><span style="color: #008080"> 32</span> <span style="color: #000000">    }
+</span><span style="color: #008080"> 33</span> 
+<span style="color: #008080"> 34</span>     <span style="color: #0000ff">return</span> <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080"> 35</span> 
+<span style="color: #008080"> 36</span> <span style="color: #000000">}
+</span><span style="color: #008080"> 37</span> 
+<span style="color: #008080"> 38</span> <span style="color: #008000">//</span><span style="color: #008000">! 對minAreaRect獲得的最小外接矩形，用縱橫比進行判斷</span>
+<span style="color: #008080"> 39</span> <span style="color: #0000ff">bool</span><span style="color: #000000"> verifySizes(RotatedRect mr)
+</span><span style="color: #008080"> 40</span> <span style="color: #000000">{
+</span><span style="color: #008080"> 41</span>     <span style="color: #0000ff">float</span> error = <span style="color: #800080">0.3</span><span style="color: #000000">;
+</span><span style="color: #008080"> 42</span>     <span style="color: #008000">//</span><span style="color: #008000">Spain car plate size: 52x11 aspect 4,7272
+</span><span style="color: #008080"> 43</span>     <span style="color: #008000">//</span><span style="color: #008000">China car plate size: 440mm*140mm，aspect 3.142857</span>
+<span style="color: #008080"> 44</span>     <span style="color: #0000ff">float</span> aspect = <span style="color: #800080">3.142857</span><span style="color: #000000">;
+</span><span style="color: #008080"> 45</span>     <span style="color: #008000">//</span><span style="color: #008000">Set a min and max area. All other patchs are discarded</span>
+<span style="color: #008080"> 46</span>     <span style="color: #0000ff">int</span> min= <span style="color: #800080">1</span>*aspect*<span style="color: #800080">1</span>; <span style="color: #008000">//</span><span style="color: #008000"> minimum area</span>
+<span style="color: #008080"> 47</span>     <span style="color: #0000ff">int</span> max= <span style="color: #800080">2000</span>*aspect*<span style="color: #800080">2000</span>; <span style="color: #008000">//</span><span style="color: #008000"> maximum area
+</span><span style="color: #008080"> 48</span>     <span style="color: #008000">//</span><span style="color: #008000">int min = 44 * 14 * m_verifyMin; </span><span style="color: #008000">//</span><span style="color: #008000"> minimum area
+</span><span style="color: #008080"> 49</span>     <span style="color: #008000">//</span><span style="color: #008000">int max = 44 * 14 * m_verifyMax; </span><span style="color: #008000">//</span><span style="color: #008000"> maximum area
+</span><span style="color: #008080"> 50</span>                                      <span style="color: #008000">//</span><span style="color: #008000">Get only patchs that match to a respect ratio.</span>
+<span style="color: #008080"> 51</span>     <span style="color: #0000ff">float</span> rmin = aspect - aspect*<span style="color: #000000">error;
+</span><span style="color: #008080"> 52</span>     <span style="color: #0000ff">float</span> rmax = aspect + aspect*<span style="color: #000000">error;
+</span><span style="color: #008080"> 53</span> 
+<span style="color: #008080"> 54</span>     <span style="color: #0000ff">int</span> area = mr.size.height *<span style="color: #000000"> mr.size.width;
+</span><span style="color: #008080"> 55</span>     <span style="color: #0000ff">float</span> r = (<span style="color: #0000ff">float</span>)mr.size.width / (<span style="color: #0000ff">float</span><span style="color: #000000">)mr.size.height;
+</span><span style="color: #008080"> 56</span>     <span style="color: #0000ff">if</span> (r &lt; <span style="color: #800080">1</span><span style="color: #000000">)
+</span><span style="color: #008080"> 57</span> <span style="color: #000000">    {
+</span><span style="color: #008080"> 58</span>         r = (<span style="color: #0000ff">float</span>)mr.size.height / (<span style="color: #0000ff">float</span><span style="color: #000000">)mr.size.width;
+</span><span style="color: #008080"> 59</span> <span style="color: #000000">    }
+</span><span style="color: #008080"> 60</span> 
+<span style="color: #008080"> 61</span>     <span style="color: #0000ff">if</span> ((area &lt; min || area &gt; max) || (r &lt; rmin || r &gt;<span style="color: #000000"> rmax))
+</span><span style="color: #008080"> 62</span> <span style="color: #000000">    {
+</span><span style="color: #008080"> 63</span>         <span style="color: #0000ff">return</span> <span style="color: #0000ff">false</span><span style="color: #000000">;
+</span><span style="color: #008080"> 64</span> <span style="color: #000000">    }
+</span><span style="color: #008080"> 65</span>     <span style="color: #0000ff">else</span>
+<span style="color: #008080"> 66</span> <span style="color: #000000">    {
+</span><span style="color: #008080"> 67</span>         <span style="color: #0000ff">return</span> <span style="color: #0000ff">true</span><span style="color: #000000">;
+</span><span style="color: #008080"> 68</span> <span style="color: #000000">    }
+</span><span style="color: #008080"> 69</span> <span style="color: #000000">}
+</span><span style="color: #008080"> 70</span> 
+<span style="color: #008080"> 71</span> Mat Gaussian(Mat &amp;<span style="color: #000000">img) {
+</span><span style="color: #008080"> 72</span>     Mat <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080"> 73</span>     GaussianBlur(img, <span style="color: #0000ff">out</span>, Size(<span style="color: #800080">3</span>, <span style="color: #800080">3</span><span style="color: #000000">),
+</span><span style="color: #008080"> 74</span>         <span style="color: #800080">0</span>, <span style="color: #800080">0</span><span style="color: #000000">, BORDER_DEFAULT);
+</span><span style="color: #008080"> 75</span>     <span style="color: #0000ff">return</span> <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080"> 76</span> 
+<span style="color: #008080"> 77</span> <span style="color: #000000">}
+</span><span style="color: #008080"> 78</span> 
+<span style="color: #008080"> 79</span> Mat Grayscale(Mat &amp;<span style="color: #000000">img) {
+</span><span style="color: #008080"> 80</span>     Mat <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080"> 81</span>     cvtColor(img, <span style="color: #0000ff">out</span><span style="color: #000000">, CV_RGB2GRAY);
+</span><span style="color: #008080"> 82</span> 
+<span style="color: #008080"> 83</span>     <span style="color: #0000ff">return</span> <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080"> 84</span> <span style="color: #000000">}
+</span><span style="color: #008080"> 85</span> 
+<span style="color: #008080"> 86</span> Mat Sobel(Mat &amp;<span style="color: #000000">img) {
+</span><span style="color: #008080"> 87</span>     Mat <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080"> 88</span> <span style="color: #000000">    Mat grad_x, grad_y;
+</span><span style="color: #008080"> 89</span> <span style="color: #000000">    Mat abs_grad_x, abs_grad_y;
+</span><span style="color: #008080"> 90</span> 
+<span style="color: #008080"> 91</span>     <span style="color: #008000">//</span><span style="color: #008000">X方向
+</span><span style="color: #008080"> 92</span>     <span style="color: #008000">//</span><span style="color: #008000">Sobel(img, grad_x, CV_16S, 1, 0, 3, 1, 1, BORDER_DEFAULT);
+</span><span style="color: #008080"> 93</span>     <span style="color: #008000">//</span><span style="color: #008000">convertScaleAbs(grad_x, abs_grad_x);</span>
+<span style="color: #008080"> 94</span>     Sobel(img, img, CV_16S, <span style="color: #800080">1</span>, <span style="color: #800080">0</span>, <span style="color: #800080">3</span>, <span style="color: #800080">1</span>, <span style="color: #800080">1</span><span style="color: #000000">, BORDER_DEFAULT);
+</span><span style="color: #008080"> 95</span>     convertScaleAbs(img, <span style="color: #0000ff">out</span><span style="color: #000000">);
+</span><span style="color: #008080"> 96</span> 
+<span style="color: #008080"> 97</span>     <span style="color: #008000">//</span><span style="color: #008000">Y方向
+</span><span style="color: #008080"> 98</span>     <span style="color: #008000">//</span><span style="color: #008000">Sobel(img, grad_y, CV_16S, 0, 1, 3, 1, 1, BORDER_DEFAULT);
+</span><span style="color: #008080"> 99</span>     <span style="color: #008000">//</span><span style="color: #008000">convertScaleAbs(grad_y, abs_grad_y);
+</span><span style="color: #008080">100</span>     <span style="color: #008000">//</span><span style="color: #008000">convertScaleAbs(img, out);
+</span><span style="color: #008080">101</span> 
+<span style="color: #008080">102</span>     <span style="color: #008000">//</span><span style="color: #008000">合併
+</span><span style="color: #008080">103</span>     <span style="color: #008000">//</span><span style="color: #008000">addWeighted(abs_grad_x, 0.5, abs_grad_y, 0.5, 0, out);</span>
+<span style="color: #008080">104</span> 
+<span style="color: #008080">105</span>     <span style="color: #0000ff">return</span> <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080">106</span> <span style="color: #000000">}
+</span><span style="color: #008080">107</span> 
+<span style="color: #008080">108</span> Mat TwoValued(Mat &amp;<span style="color: #000000">img) {
+</span><span style="color: #008080">109</span>     Mat <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080">110</span>     threshold(img, <span style="color: #0000ff">out</span>, <span style="color: #800080">0</span>, <span style="color: #800080">255</span>, CV_THRESH_OTSU +<span style="color: #000000"> CV_THRESH_BINARY);
+</span><span style="color: #008080">111</span>     <span style="color: #008000">//</span><span style="color: #008000">threshold(img, out, 100, 255, CV_THRESH_BINARY);</span>
+<span style="color: #008080">112</span> 
+<span style="color: #008080">113</span>     <span style="color: #0000ff">return</span> <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080">114</span> <span style="color: #000000">}
+</span><span style="color: #008080">115</span> 
+<span style="color: #008080">116</span> Mat Close(Mat &amp;<span style="color: #000000">img) {
+</span><span style="color: #008080">117</span>     Mat <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080">118</span>     <span style="color: #008000">//</span><span style="color: #008000">Mat element(5, 5, CV_8U, cv::Scalar(1));</span>
+<span style="color: #008080">119</span>     Mat element = getStructuringElement(MORPH_RECT, Size(<span style="color: #800080">17</span>, <span style="color: #800080">5</span><span style="color: #000000">));
+</span><span style="color: #008080">120</span>     morphologyEx(img, <span style="color: #0000ff">out</span><span style="color: #000000">, cv::MORPH_CLOSE, element);
+</span><span style="color: #008080">121</span> 
+<span style="color: #008080">122</span>     <span style="color: #0000ff">return</span> <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080">123</span> <span style="color: #000000">}
+</span><span style="color: #008080">124</span> 
+<span style="color: #008080">125</span> 
+<span style="color: #008080">126</span> <span style="color: #0000ff">void</span> Contour(Mat &amp;img, Mat &amp;<span style="color: #0000ff">out</span><span style="color: #000000">) {
+</span><span style="color: #008080">127</span>     RNG rng(<span style="color: #800080">12345</span><span style="color: #000000">);
+</span><span style="color: #008080">128</span> 
+<span style="color: #008080">129</span>     vector&lt; Mat &gt; contours(<span style="color: #800080">1000</span><span style="color: #000000">);
+</span><span style="color: #008080">130</span>     vector&lt;Vec4i&gt; hierarchy(<span style="color: #800080">1000</span><span style="color: #000000">);
+</span><span style="color: #008080">131</span>     findContours(img, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(<span style="color: #800080">0</span>, <span style="color: #800080">0</span><span style="color: #000000">));
+</span><span style="color: #008080">132</span> 
+<span style="color: #008080">133</span> 
+<span style="color: #008080">134</span>     vector&lt; Mat &gt;::iterator itc =<span style="color: #000000"> contours.begin();
+</span><span style="color: #008080">135</span>     vector&lt;RotatedRect&gt;<span style="color: #000000"> rects;
+</span><span style="color: #008080">136</span>     <span style="color: #0000ff">int</span> t = <span style="color: #800080">0</span><span style="color: #000000">;
+</span><span style="color: #008080">137</span>     <span style="color: #0000ff">while</span> (itc !=<span style="color: #000000"> contours.end()) {
+</span><span style="color: #008080">138</span>         <span style="color: #008000">//</span><span style="color: #008000">Create bounding rect of object</span>
+<span style="color: #008080">139</span>         RotatedRect mr = minAreaRect(Mat(*<span style="color: #000000">itc));
+</span><span style="color: #008080">140</span>         <span style="color: #008000">//</span><span style="color: #008000">large the rect for more</span>
+<span style="color: #008080">141</span>         <span style="color: #0000ff">if</span> (!<span style="color: #000000">verifySizes(mr)) {
+</span><span style="color: #008080">142</span>             itc =<span style="color: #000000"> contours.erase(itc);
+</span><span style="color: #008080">143</span> <span style="color: #000000">        }
+</span><span style="color: #008080">144</span>         <span style="color: #0000ff">else</span><span style="color: #000000"> {
+</span><span style="color: #008080">145</span>             ++<span style="color: #000000">itc;
+</span><span style="color: #008080">146</span> <span style="color: #000000">            rects.push_back(mr);
+</span><span style="color: #008080">147</span> <span style="color: #000000">        }
+</span><span style="color: #008080">148</span> <span style="color: #000000">   }
+</span><span style="color: #008080">149</span>     
+<span style="color: #008080">150</span> <span style="color: #000000">    cv::Mat result;
+</span><span style="color: #008080">151</span> <span style="color: #000000">    img.copyTo(result);
+</span><span style="color: #008080">152</span>     <span style="color: #0000ff">for</span> (<span style="color: #0000ff">int</span> i = <span style="color: #800080">0</span>; i&lt; contours.size(); i++<span style="color: #000000">)
+</span><span style="color: #008080">153</span> <span style="color: #000000">    {
+</span><span style="color: #008080">154</span>         drawContours(result, contours, i, Scalar(<span style="color: #800080">0</span>, <span style="color: #800080">0</span>, <span style="color: #800080">255</span>), <span style="color: #800080">2</span>, <span style="color: #800080">8</span>, vector&lt;Vec4i&gt;(), <span style="color: #800080">0</span><span style="color: #000000">, Point());
+</span><span style="color: #008080">155</span>         <span style="color: #008000">//</span><span style="color: #008000">drawContours(result, contours, i, Scalar(255), 2);</span>
+<span style="color: #008080">156</span> <span style="color: #000000">    }
+</span><span style="color: #008080">157</span>     <span style="color: #008000">//</span><span style="color: #008000">imshow("畫輪廓", out);</span>
+<span style="color: #008080">158</span> 
+<span style="color: #008080">159</span>     <span style="color: #0000ff">for</span> (<span style="color: #0000ff">int</span> i = <span style="color: #800080">0</span>; i &lt; rects.size(); i++<span style="color: #000000">) {
+</span><span style="color: #008080">160</span>         circle(result, rects[i].center, <span style="color: #800080">3</span>, Scalar(<span style="color: #800080">0</span>, <span style="color: #800080">255</span>, <span style="color: #800080">0</span>), -<span style="color: #800080">1</span><span style="color: #000000">);
+</span><span style="color: #008080">161</span> 
+<span style="color: #008080">162</span>         <span style="color: #0000ff">float</span> minSize = (rects[i].size.width &lt; rects[i].size.height) ?<span style="color: #000000"> rects[i].size.width : rects[i].size.height;
+</span><span style="color: #008080">163</span>         <span style="color: #008000">//</span><span style="color: #008000">minSize = minSize - minSize*0.5;</span>
+<span style="color: #008080">164</span> 
+<span style="color: #008080">165</span> <span style="color: #000000">        srand(time(NULL));
+</span><span style="color: #008080">166</span> <span style="color: #000000">        Mat mask;
+</span><span style="color: #008080">167</span>         mask.create(<span style="color: #0000ff">out</span>.rows + <span style="color: #800080">2</span>, <span style="color: #0000ff">out</span>.cols + <span style="color: #800080">2</span><span style="color: #000000">, CV_8UC1);
+</span><span style="color: #008080">168</span>         mask = Scalar::all(<span style="color: #800080">0</span><span style="color: #000000">);
+</span><span style="color: #008080">169</span>         <span style="color: #0000ff">int</span> loDiff = <span style="color: #800080">30</span><span style="color: #000000">;
+</span><span style="color: #008080">170</span>         <span style="color: #0000ff">int</span> upDiff = <span style="color: #800080">30</span><span style="color: #000000">;
+</span><span style="color: #008080">171</span>         <span style="color: #0000ff">int</span> connectivity = <span style="color: #800080">4</span><span style="color: #000000">;
+</span><span style="color: #008080">172</span>         <span style="color: #0000ff">int</span> newMaskVal = <span style="color: #800080">255</span><span style="color: #000000">;
+</span><span style="color: #008080">173</span>         <span style="color: #0000ff">int</span> NumSeeds = <span style="color: #800080">10</span><span style="color: #000000">;
+</span><span style="color: #008080">174</span> <span style="color: #000000">        Rect ccomp;
+</span><span style="color: #008080">175</span>         <span style="color: #0000ff">int</span> flags = connectivity + (newMaskVal &lt;&lt; <span style="color: #800080">8</span>) + CV_FLOODFILL_FIXED_RANGE +<span style="color: #000000"> CV_FLOODFILL_MASK_ONLY;
+</span><span style="color: #008080">176</span> 
+<span style="color: #008080">177</span>         <span style="color: #0000ff">for</span> (<span style="color: #0000ff">int</span> j = <span style="color: #800080">0</span>; j &lt; NumSeeds; j++<span style="color: #000000">) {
+</span><span style="color: #008080">178</span> <span style="color: #000000">            Point seed;
+</span><span style="color: #008080">179</span>             seed.x = rects[i].center.x + rand() % (<span style="color: #0000ff">int</span>)minSize - (minSize / <span style="color: #800080">2</span><span style="color: #000000">);
+</span><span style="color: #008080">180</span>             seed.y = rects[i].center.y + rand() % (<span style="color: #0000ff">int</span>)minSize - (minSize / <span style="color: #800080">2</span><span style="color: #000000">);
+</span><span style="color: #008080">181</span>             circle(result, seed, <span style="color: #800080">1</span>, Scalar(<span style="color: #800080">0</span>, <span style="color: #800080">255</span>, <span style="color: #800080">255</span>), -<span style="color: #800080">1</span><span style="color: #000000">);
+</span><span style="color: #008080">182</span>             <span style="color: #0000ff">int</span> area = floodFill(<span style="color: #0000ff">out</span>, mask, seed, Scalar(<span style="color: #800080">255</span>, <span style="color: #800080">0</span>, <span style="color: #800080">0</span>), &amp;<span style="color: #000000">ccomp, Scalar(loDiff, loDiff, loDiff), Scalar(upDiff, upDiff, upDiff), flags);
+</span><span style="color: #008080">183</span> <span style="color: #000000">        }
+</span><span style="color: #008080">184</span>         imshow(<span style="color: #800000">"</span><span style="color: #800000">漫水填充</span><span style="color: #800000">"</span><span style="color: #000000">, mask);
+</span><span style="color: #008080">185</span>         
+<span style="color: #008080">186</span>         vector&lt;Point&gt;<span style="color: #000000"> pointsInterest;
+</span><span style="color: #008080">187</span>         Mat_&lt;uchar&gt;::iterator itMask = mask.begin&lt;uchar&gt;<span style="color: #000000">();
+</span><span style="color: #008080">188</span>         Mat_&lt;uchar&gt;::iterator end = mask.end&lt;uchar&gt;<span style="color: #000000">();
+</span><span style="color: #008080">189</span>         <span style="color: #0000ff">for</span> (; itMask != end; ++<span style="color: #000000">itMask)
+</span><span style="color: #008080">190</span>             <span style="color: #0000ff">if</span> (*itMask == <span style="color: #800080">255</span><span style="color: #000000">)
+</span><span style="color: #008080">191</span> <span style="color: #000000">                pointsInterest.push_back(itMask.pos());
+</span><span style="color: #008080">192</span> 
+<span style="color: #008080">193</span>         RotatedRect minRect =<span style="color: #000000"> minAreaRect(pointsInterest);
+</span><span style="color: #008080">194</span> 
+<span style="color: #008080">195</span>         <span style="color: #0000ff">if</span><span style="color: #000000"> (verifySizes(minRect)) {
+</span><span style="color: #008080">196</span>             <span style="color: #008000">//</span><span style="color: #008000"> rotated rectangle drawing   </span>
+<span style="color: #008080">197</span>             Point2f rect_points[<span style="color: #800080">4</span><span style="color: #000000">]; minRect.points(rect_points);
+</span><span style="color: #008080">198</span>             <span style="color: #0000ff">for</span> (<span style="color: #0000ff">int</span> j = <span style="color: #800080">0</span>; j &lt; <span style="color: #800080">4</span>; j++<span style="color: #000000">)
+</span><span style="color: #008080">199</span>                 line(result, rect_points[j], rect_points[(j + <span style="color: #800080">1</span>) % <span style="color: #800080">4</span>], Scalar(<span style="color: #800080">0</span>, <span style="color: #800080">0</span>, <span style="color: #800080">255</span>), <span style="color: #800080">1</span>, <span style="color: #800080">8</span><span style="color: #000000">);
+</span><span style="color: #008080">200</span> 
+<span style="color: #008080">201</span>             <span style="color: #008000">//</span><span style="color: #008000">Get rotation matrix  </span>
+<span style="color: #008080">202</span>             <span style="color: #0000ff">float</span> r = (<span style="color: #0000ff">float</span>)minRect.size.width / (<span style="color: #0000ff">float</span><span style="color: #000000">)minRect.size.height;
+</span><span style="color: #008080">203</span>             <span style="color: #0000ff">float</span> angle =<span style="color: #000000"> minRect.angle;
+</span><span style="color: #008080">204</span>             <span style="color: #0000ff">if</span> (r &lt; <span style="color: #800080">1</span><span style="color: #000000">)
+</span><span style="color: #008080">205</span>                 angle = <span style="color: #800080">90</span> +<span style="color: #000000"> angle;
+</span><span style="color: #008080">206</span>             Mat rotmat = getRotationMatrix2D(minRect.center, angle, <span style="color: #800080">1</span><span style="color: #000000">);
+</span><span style="color: #008080">207</span> 
+<span style="color: #008080">208</span>             <span style="color: #008000">//</span><span style="color: #008000">Create and rotate image  </span>
+<span style="color: #008080">209</span> <span style="color: #000000">            Mat img_rotated;
+</span><span style="color: #008080">210</span>             warpAffine(<span style="color: #0000ff">out</span>, img_rotated, rotmat, <span style="color: #0000ff">out</span>.size(), CV_INTER_CUBIC);<span style="color: #008000">//</span><span style="color: #008000">實現旋轉
+</span><span style="color: #008080">211</span> 
+<span style="color: #008080">212</span>             <span style="color: #008000">//</span><span style="color: #008000">Crop image  </span>
+<span style="color: #008080">213</span>             Size rect_size =<span style="color: #000000"> minRect.size;
+</span><span style="color: #008080">214</span>             <span style="color: #0000ff">if</span> (r &lt; <span style="color: #800080">1</span><span style="color: #000000">)
+</span><span style="color: #008080">215</span> <span style="color: #000000">                swap(rect_size.width, rect_size.height);
+</span><span style="color: #008080">216</span> <span style="color: #000000">            Mat img_crop;
+</span><span style="color: #008080">217</span> <span style="color: #000000">            getRectSubPix(img_rotated, rect_size, minRect.center, img_crop);
+</span><span style="color: #008080">218</span> 
+<span style="color: #008080">219</span> <span style="color: #000000">            Mat resultResized;
+</span><span style="color: #008080">220</span>             resultResized.create(<span style="color: #800080">33</span>, <span style="color: #800080">144</span><span style="color: #000000">, CV_8UC3);
+</span><span style="color: #008080">221</span>             resize(img_crop, resultResized, resultResized.size(), <span style="color: #800080">0</span>, <span style="color: #800080">0</span><span style="color: #000000">, INTER_CUBIC);;
+</span><span style="color: #008080">222</span> 
+<span style="color: #008080">223</span>             <span style="color: #808080">///</span><span style="color: #008000">/Equalize croped image  </span>
+<span style="color: #008080">224</span> <span style="color: #000000">            Mat grayResult;
+</span><span style="color: #008080">225</span>             cvtColor(resultResized, grayResult, CV_BGR2GRAY);<span style="color: #008000">//</span><span style="color: #008000"> CV_RGB2GRAY</span>
+<span style="color: #008080">226</span>             blur(grayResult, grayResult, Size(<span style="color: #800080">3</span>, <span style="color: #800080">3</span><span style="color: #000000">));
+</span><span style="color: #008080">227</span>             grayResult =<span style="color: #000000"> histeq(grayResult);
+</span><span style="color: #008080">228</span> 
+<span style="color: #008080">229</span>             <span style="color: #0000ff">if</span> (<span style="color: #800080">1</span><span style="color: #000000">) {
+</span><span style="color: #008080">230</span>                 stringstream ss(stringstream::<span style="color: #0000ff">in</span> | stringstream::<span style="color: #0000ff">out</span><span style="color: #000000">);
+</span><span style="color: #008080">231</span>                 ss &lt;&lt; <span style="color: #800000">"</span><span style="color: #800000">haha</span><span style="color: #800000">"</span> &lt;&lt; <span style="color: #800000">"</span><span style="color: #800000">_</span><span style="color: #800000">"</span> &lt;&lt; i &lt;&lt; <span style="color: #800000">"</span><span style="color: #800000">.jpg</span><span style="color: #800000">"</span><span style="color: #000000">;
+</span><span style="color: #008080">232</span> <span style="color: #000000">                imwrite(ss.str(), grayResult);
+</span><span style="color: #008080">233</span> <span style="color: #000000">            }
+</span><span style="color: #008080">234</span> 
+<span style="color: #008080">235</span> <span style="color: #000000">        }
+</span><span style="color: #008080">236</span> <span style="color: #000000">    }
+</span><span style="color: #008080">237</span> <span style="color: #000000">}
+</span><span style="color: #008080">238</span> 
+<span style="color: #008080">239</span> 
+<span style="color: #008080">240</span> <span style="color: #0000ff">int</span><span style="color: #000000"> main() {
+</span><span style="color: #008080">241</span> <span style="color: #000000">    Mat img;
+</span><span style="color: #008080">242</span>     Mat <span style="color: #0000ff">out</span><span style="color: #000000">;
+</span><span style="color: #008080">243</span>     <span style="color: #008000">//</span><span style="color: #008000">Mat result;
+</span><span style="color: #008080">244</span> 
+<span style="color: #008080">245</span>     <span style="color: #008000">//</span><span style="color: #008000">載入圖片  </span>
+<span style="color: #008080">246</span>     img = imread(<span style="color: #800000">"</span><span style="color: #800000">test1.jpg</span><span style="color: #800000">"</span>);<span style="color: #008000">//</span><span style="color: #008000">, CV_LOAD_IMAGE_GRAYSCALE);</span>
+<span style="color: #008080">247</span>     img.copyTo(<span style="color: #0000ff">out</span><span style="color: #000000">);
+</span><span style="color: #008080">248</span>     <span style="color: #008000">//</span><span style="color: #008000">imshow ("原始圖", img);</span>
+<span style="color: #008080">249</span>     img =<span style="color: #000000"> Gaussian(img);
+</span><span style="color: #008080">250</span>     imshow (<span style="color: #800000">"</span><span style="color: #800000">高斯模糊</span><span style="color: #800000">"</span><span style="color: #000000">, img);
+</span><span style="color: #008080">251</span> 
+<span style="color: #008080">252</span>     img =<span style="color: #000000"> Grayscale(img);
+</span><span style="color: #008080">253</span>     imshow(<span style="color: #800000">"</span><span style="color: #800000">灰度化</span><span style="color: #800000">"</span><span style="color: #000000">, img);
+</span><span style="color: #008080">254</span> 
+<span style="color: #008080">255</span>     img =<span style="color: #000000"> Sobel(img);
+</span><span style="color: #008080">256</span>     imshow(<span style="color: #800000">"</span><span style="color: #800000">Sobel_X</span><span style="color: #800000">"</span><span style="color: #000000">, img);
+</span><span style="color: #008080">257</span> 
+<span style="color: #008080">258</span>     img =<span style="color: #000000"> TwoValued(img);
+</span><span style="color: #008080">259</span>     imshow(<span style="color: #800000">"</span><span style="color: #800000">二值化</span><span style="color: #800000">"</span><span style="color: #000000">, img);
+</span><span style="color: #008080">260</span> 
+<span style="color: #008080">261</span>     img =<span style="color: #000000"> Close(img);
+</span><span style="color: #008080">262</span>     imshow(<span style="color: #800000">"</span><span style="color: #800000">閉操作</span><span style="color: #800000">"</span><span style="color: #000000">, img);
+</span><span style="color: #008080">263</span> 
+<span style="color: #008080">264</span>     Contour(img, <span style="color: #0000ff">out</span><span style="color: #000000">);
+</span><span style="color: #008080">265</span> 
+<span style="color: #008080">266</span>     waitKey(<span style="color: #800080">0</span><span style="color: #000000">);
+</span><span style="color: #008080">267</span> <span style="color: #000000">    cvDestroyAllWindows();
+</span><span style="color: #008080">268</span> }</pre>
+</div>
+<span class="cnblogs_code_collapse">View Code</span></div>
+<p>&nbsp;</p>
+<p><span style="font-size: 18pt"><strong><span style="color: #ff0000">總結：</span></strong></span></p>
+<p><span style="font-size: 18px; background-color: #ccffff">車牌定位部分到此告一段落，但這方面的研究還要繼續。</span></p>
+<p><span style="font-size: 18px; background-color: #ccffff">本演算法僅適用於特定的圖片，對於另一些場合的圖片需要重新進行引數測試以判斷準確率。需要對演算法進一步完善，實現複雜背景下車牌的識別。</span></p>
+<p><span style="font-size: 18px; background-color: #ccffff">同時想要得到更準確的車牌區域，需要進行<span style="color: #ff0000">SVM</span>訓練。</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 18pt; background-color: #ffffff"><strong><span style="color: #ff0000">&nbsp;注：</span></strong></span></p>
+<p><span style="font-size: 14pt; color: #000000; background-color: #ccffcc"><strong>註解部分來自百度百科和<a class="vglnk" href="http://www.opencv.org.cn/" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>opencv</span><span>.</span><span>org</span><span>.</span><span>cn</span></a></strong></span></p>
+<p><span style="font-size: 18px; color: #000000; background-color: #ccffcc"><strong>學習自——<a class="vglnk" href="http://www.cnblogs.com/subconscious/p/3979988.html" rel="nofollow"><span>http</span><span>://</span><span>www</span><span>.</span><span>cnblogs</span><span>.</span><span>com</span><span>/</span><span>subconscious</span><span>/</span><span>p</span><span>/</span><span>3979988</span><span>.</span><span>html</span></a></strong></span></p>                  <p>關鍵詞：<a href="https://tw.saowen.com/search/b::aW1n">img</a> <a href="https://tw.saowen.com/search/b::bWF0">mat</a> <a href="https://tw.saowen.com/search/b::Y3Y=">cv</a> <a href="https://tw.saowen.com/search/b::b3V0">out</a> <a href="https://tw.saowen.com/search/b::aW50">int</a> <a href="https://tw.saowen.com/search/b::c2l6ZQ==">size</a> <a href="https://tw.saowen.com/search/b::5Zu%2B5YOP">影象</a> <a href="https://tw.saowen.com/search/b::ZmxvYXQ=">float</a> <a href="https://tw.saowen.com/search/b::6L2u5buT">輪廓</a> <a href="https://tw.saowen.com/search/b::cmVjdA==">rect</a> </p>
+                  <p>相關推薦：</p>
+                  <p><a href="https://tw.saowen.com/a/71eeceb79cfb6dbe9ecca823b8015b9b86fb2c5e5926c59bf8c2337dcaf98f2d"><strong>微信小程序車牌號碼模擬鍵盤輸入</strong></a></p><p><a href="https://tw.saowen.com/a/46fb4048d00c2bb55f11f87da178865bcbf44d511b373f360907a4354a3e31f8"><strong>關於主席樹的入門，講解和題單</strong></a></p><p><a href="https://tw.saowen.com/a/047e19285b7d94ae0da0c603a169c85c1091747c2c884c1d537aa4354b3251b0"><strong>2018 Multi-University Training Contest 2</strong></a></p><p><a href="https://tw.saowen.com/a/4d36438b1bc8985a43ab1870138b05606838e1dc5fd44d8754fea2422ef227c5"><strong>【模板】高精度運算</strong></a></p><p><a href="https://tw.saowen.com/a/d4cbd18940efb1e2db38a09114129431844feb2de572fe40a9589e25458b5e28"><strong>用vue寫了個移動端車牌輸入鍵盤</strong></a></p><p><a href="https://tw.saowen.com/a/34fda0176bceecf822c8ff738fa896f193973074ce726da2fb73ea0474a6a169"><strong>【深度學習】用PaddlePaddle進行車牌識別（二）</strong></a></p><p><a href="https://tw.saowen.com/a/388ec4656e7a69f42851b1179befea7ee5e4db792a34ec1eca111a2263dfd4d2"><strong>php 設計模式之工廠模式</strong></a></p><p><a href="https://tw.saowen.com/a/9b322685ca99b2deb43b342697d50a69a1e6c217f744a614f5d38c151e6b68a3"><strong>【深度學習系列】用PaddlePaddle進行車牌識別（一）</strong></a></p><p><a href="https://tw.saowen.com/a/1be5f3534e3f7cd8eb33436dd5451429ab83f0ca3764c674da4aa3aa9ba435d7"><strong>北京集訓:20180311</strong></a></p><p><a href="https://tw.saowen.com/a/81cd49cfb820f6d85c9311b771b22279c6544bccef936ce852712965f65d189b"><strong>汽車車牌JS正則表示式驗證(含新能源車牌)</strong></a></p>                </section>
+                <footer class="post-footer">
+                    <!--
+                    <figure class="author-image">
+                        <a class="img" href="/author/xxx/" style="background-image: url(/content/images/2016/05/46432216001_ffd2d84d48c6cea1eb23_192.jpg)"><span class="hidden">Alex Ellis's Picture</span></a>
+                    </figure>
+                    -->
+                    <section class="author">
+                        <h4><a href="https://tw.saowen.com/source/cbb/thunder-wu">朝_風</a></h4>
+                        <p>Read <a href="https://tw.saowen.com/source/cbb/thunder-wu">more posts</a> by this author.</p>
+                        <div class="author-meta">
+                            <span class="author-location icon-location">China</span>
+                            <span class="author-link icon-link"><a href="https://tw.saowen.com/source/cbb/thunder-wu">/source/cbb/thunder-wu</a></span>
+                        </div>
+                    </section>
+                    <section class="share">
+                        <h4>Share this post</h4>
+                        <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=OpenCV%E5%AD%B8%E7%BF%92%E4%B9%8B%E8%B7%AF%E2%80%94%E2%80%94%E8%BB%8A%E7%89%8C%E8%AD%98%E5%88%A5%E4%B9%8B%E8%BB%8A%E7%89%8C%E5%AE%9A%E4%BD%8D&amp;url=https://tw.saowen.com/a/08b4e72c357a4bd8cb9e4c0e4fbfd7518b8649775bb2ebbf22409df3145aa4df" onclick="window.open(this.href, &#39;twitter-share&#39;, &#39;width=550,height=235&#39;);return false;">
+                            <span class="hidden">Twitter</span>
+                        </a>
+                        <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://tw.saowen.com/a/08b4e72c357a4bd8cb9e4c0e4fbfd7518b8649775bb2ebbf22409df3145aa4df" onclick="window.open(this.href, &#39;facebook-share&#39;,&#39;width=580,height=296&#39;);return false;">
+                            <span class="hidden">Facebook</span>
+                        </a>
+                        <a class="icon-google-plus" href="https://plus.google.com/share?url=https://tw.saowen.com/a/08b4e72c357a4bd8cb9e4c0e4fbfd7518b8649775bb2ebbf22409df3145aa4df" onclick="window.open(this.href, &#39;google-plus-share&#39;, &#39;width=490,height=530&#39;);return false;">
+                            <span class="hidden">Google+</span>
+                        </a>
+                    </section>
+                </footer>
+                <div id="disqus_thread"><iframe id="dsq-app3300" name="dsq-app3300" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" width="100%" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/saved_resource(1).html" style="width: 1px !important; min-width: 100% !important; border: none !important; overflow: hidden !important; height: 391px !important;" horizontalscrolling="no" verticalscrolling="no"></iframe><iframe id="dsq-app3303" name="dsq-app3303" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" sandbox="allow-forms allow-popups allow-same-origin allow-scripts" width="100%" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/saved_resource(2).html" style="width: 1px !important; min-width: 100% !important; border: none !important; overflow: hidden !important; height: 623px !important;"></iframe></div>
+                <script>
+                  disqus_shortname = 'SAOWEN';
+                  disqus_page_url = 'https://tw.saowen.com/a/08b4e72c357a4bd8cb9e4c0e4fbfd7518b8649775bb2ebbf22409df3145aa4df';
+                  disqus_page_title = 'OpenCV學習之路——車牌識別之車牌定位';
+                </script>
+                <script>
+
+                /**
+                *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+                /*
+                var disqus_config = function () {
+                this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                };
+                */
+                (function() { // DON'T EDIT BELOW THIS LINE
+                var d = document, s = d.createElement('script');
+                s.src = 'https://saowen.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+                })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </main>
+        <footer class="site-footer clearfix">
+            <section class="copyright"><a href="https://tw.saowen.com/">掃文資訊</a> © 2017 / runtime 0.103961s / size: 101124</section>
+            <section class="poweredby">published with <a href="https://tw.saowen.com/">CoreCMS Alpha v0.1</a> <a href="https://www.saowen.com/">CN</a> | <a href="https://tw.saowen.com/">TW</a> | <a href="https://hk.saowen.com/">HK</a> | <a href="https://tw.saowen.com/source/~/cbb">技術 / 程式設計</a></section>
+        </footer>
+    </div>
+        <script src="https://storage.cdn.dogedoge.com/static/js/lazysizes.min.js" async=""></script>
+    <script>
+      window.lazySizesConfig = window.lazySizesConfig || {};
+      window.lazySizesConfig.lazyClass = 'img_loading';
+    //  window.lazySizesConfig.customMedia = {
+    //    '--small': '(max-width: 480px)',
+    //    '--medium': '(max-width: 900px)',
+    //    '--large': '(max-width: 1400px)',
+    //  };
+    </script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/js(1)"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-120209922-1');
+  gtag('event', 'timing_complete', {
+      'name': 'server_runtime_article',
+      'value': 103.961,
+      'event_category': 'server_runtime'
+    });
+</script>
+
+<ins class="adsbygoogle adsbygoogle-noablate" data-adsbygoogle-status="done" style="display: none !important;"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:0px;margin:0;padding:0;position:relative;visibility:visible;width:0px;background-color:transparent;"><ins id="aswift_0_anchor" style="display:block;border:none;height:0px;margin:0;padding:0;position:relative;visibility:visible;width:0px;background-color:transparent;"><iframe frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;border:0px;width:0px;height:0px;" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/saved_resource(3).html"></iframe></ins></ins></ins><iframe id="google_osd_static_frame_2179851924795" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/saved_resource(4).html"></iframe><iframe style="display: none;" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/saved_resource(5).html"></iframe></body><iframe id="google_shimpl" style="display: none;" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/saved_resource(6).html"></iframe><iframe id="google_esf" name="google_esf" src="./OpenCV學習之路——車牌識別之車牌定位 - 掃文資訊_files/zrt_lookup.html" data-ad-client="ca-pub-6601249682792819" style="display: none;"></iframe></html>
